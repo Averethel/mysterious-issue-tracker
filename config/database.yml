@@ -1,0 +1,12 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  database: mysterious_issue_tracker_development
+
+test:
+  <<: *default
+  database: mysterious_issue_tracker_test
