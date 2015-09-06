@@ -1,5 +1,6 @@
 class Api::V1::IssuesController < ApplicationController
-  before_action :set_issue, only: [:show, :update]
+  before_action :set_issue, only: [:show, :update, :destroy]
+
   rescue_from ActionController::ParameterMissing, with: :invalid_params
 
   ## Returns a list of issues
@@ -202,6 +203,23 @@ class Api::V1::IssuesController < ApplicationController
   rescue ArgumentError => e
     invalid_params(e)
   end
+
+  ## Deletes an issue
+  #
+  # DELETE /issues/:id
+  #
+  # = Examples
+  #
+  #   resp = conn.delete("/api/v1/issues/1")
+  #
+  #   resp.status
+  #   => 204
+  def destroy
+    @issue.destroy
+
+    head :no_content
+  end
+
 private
 
   def set_issue

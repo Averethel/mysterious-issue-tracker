@@ -189,3 +189,14 @@
        ]
      }
 ```
+
+## Delete an issue
+### DELETE /issues/:id
+#### Examples
+```
+  resp = conn.delete("/api/v1/issues/1")
+```
+```
+  resp.status
+  => 204
+```

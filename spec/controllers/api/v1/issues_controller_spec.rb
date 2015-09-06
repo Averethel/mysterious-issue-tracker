@@ -87,4 +87,14 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    let!(:issue){ FactoryGirl.create(:issue) }
+
+    it 'destroys the requested issue' do
+      expect {
+        delete :destroy, {id: issue.to_param}
+      }.to change(Issue, :count).by(-1)
+    end
+  end
 end
