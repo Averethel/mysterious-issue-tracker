@@ -1,31 +1,33 @@
 require 'rails_helper'
 
 RSpec.describe Issue do
-  let(:attributes){ {} }
-  subject{ described_class.new(attributes) }
+  let(:attributes) { {} }
+  subject { described_class.new(attributes) }
 
-  it{ is_expected.to define_enum_for(:status) }
-  it{ is_expected.to define_enum_for(:priority) }
+  it { is_expected.to define_enum_for(:status) }
+  it { is_expected.to define_enum_for(:priority) }
 
-  it{ is_expected.to validate_presence_of(:title) }
-  it{ is_expected.to validate_presence_of(:description) }
-  it{ is_expected.to validate_presence_of(:priority) }
-  it{ is_expected.to validate_presence_of(:status) }
+  it { is_expected.to validate_presence_of(:title) }
+  it { is_expected.to validate_presence_of(:description) }
+  it { is_expected.to validate_presence_of(:priority) }
+  it { is_expected.to validate_presence_of(:status) }
 
   describe '#status' do
-    let(:attributes){ {} }
+    let(:attributes) { {} }
 
     it 'is open by default' do
       expect(subject.status).to eq('open')
     end
 
     context 'validations' do
-      let(:attributes){{
-        status: nil,
-        title: "There's a nil status",
-        description: "Status 'nil' is valid",
-        priority: 'major'
-      }}
+      let(:attributes) do
+        {
+          status: nil,
+          title: "There's a nil status",
+          description: "Status 'nil' is valid",
+          priority: 'major'
+        }
+      end
 
       it 'cannot be nil' do
         expect(subject.valid?).to be(false)
@@ -33,12 +35,14 @@ RSpec.describe Issue do
       end
 
       context 'on create' do
-        let(:attributes){{
-          status: 'in_progress',
-          title: "There's a nil status",
-          description: "Status 'nil' is valid",
-          priority: 'minor'
-        }}
+        let(:attributes) do
+          {
+            status: 'in_progress',
+            title: "There's a nil status",
+            description: "Status 'nil' is valid",
+            priority: 'minor'
+          }
+        end
 
         it 'must be open' do
           expect(subject.valid?).to be(false)

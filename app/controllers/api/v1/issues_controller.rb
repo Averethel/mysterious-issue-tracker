@@ -220,7 +220,7 @@ class Api::V1::IssuesController < ApplicationController
     head :no_content
   end
 
-private
+  private
 
   def set_issue
     @issue = Issue.find(params[:id])
@@ -234,9 +234,9 @@ private
     render json: {
       errors: [{
         status: '422',
-        title: "Invalid JSON submitted",
+        title: 'Invalid JSON submitted',
         detail: error.message
-    }]}, status: :unprocessable_entity
+      }] }, status: :unprocessable_entity
   end
 
   def validation_errors(errors)

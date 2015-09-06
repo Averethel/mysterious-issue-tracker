@@ -5,7 +5,7 @@ class Issue < ActiveRecord::Base
   validates :title, :description, :priority, :status, presence: true
   validate :ensure_status_open, on: :create
 
-private
+  private
 
   def ensure_status_open
     return if open?

@@ -2,47 +2,49 @@ require 'rails_helper'
 
 RSpec.describe 'Issues', type: :request do
   describe 'PATCH /api/v1/issues/1' do
-    let(:issue){ FactoryGirl.create(:issue) }
-    let(:body){ JSON.parse(response.body) }
+    let(:issue) { FactoryGirl.create(:issue) }
+    let(:body) { JSON.parse(response.body) }
 
     before do
       patch api_v1_issue_path(issue), params
     end
 
     context 'with valid params' do
-      let(:params){{
-        issue: {
-          title: 'No comments',
-          description: 'I want to comment issues',
-          priority: 'critical'
+      let(:params) do
+        {
+          issue: {
+            title: 'No comments',
+            description: 'I want to comment issues',
+            priority: 'critical'
+          }
         }
-      }}
+      end
 
       context 'data' do
-        let(:data){ body["data"] }
-        let(:attributes){ data['attributes'] }
+        let(:data) { body['data'] }
+        let(:attributes) { data['attributes'] }
 
         it 'includes id' do
-          expect(data["id"]).to eq(issue.id.to_s)
+          expect(data['id']).to eq(issue.id.to_s)
         end
 
         it 'includes type' do
-          expect(data["type"]).to eq("issues")
+          expect(data['type']).to eq('issues')
         end
 
         it 'includes issue attributes' do
-          expect(attributes["title"]).to eq('No comments')
-          expect(attributes["description"]).to eq('I want to comment issues')
-          expect(attributes["priority"]).to eq('critical')
-          expect(attributes["status"]).to eq(issue.status)
+          expect(attributes['title']).to eq('No comments')
+          expect(attributes['description']).to eq('I want to comment issues')
+          expect(attributes['priority']).to eq('critical')
+          expect(attributes['status']).to eq(issue.status)
         end
       end
     end
 
     context 'with invalid params:' do
       context 'missing issue param' do
-        let(:params){{}}
-        let(:error){ body['errors'].first }
+        let(:params) { {} }
+        let(:error) { body['errors'].first }
 
         it 'is unprocessable entity' do
           expect(response.status).to eq(422)
@@ -56,12 +58,14 @@ RSpec.describe 'Issues', type: :request do
       end
 
       context 'wrong priority' do
-        let(:params){{
-          issue: {
-            priority: 'invalid'
+        let(:params) do
+          {
+            issue: {
+              priority: 'invalid'
+            }
           }
-        }}
-        let(:error){ body['errors'].first }
+        end
+        let(:error) { body['errors'].first }
 
         it 'is unprocessable entity' do
           expect(response.status).to eq(422)
@@ -75,8 +79,8 @@ RSpec.describe 'Issues', type: :request do
       end
 
       context 'validation errors' do
-        let(:params){{issue: {title: "", description: ""}}}
-        let(:errors){ body['errors'] }
+        let(:params) { { issue: { title: '', description: '' } } }
+        let(:errors) { body['errors'] }
 
         it 'is unprocessable entity' do
           expect(response.status).to eq(422)

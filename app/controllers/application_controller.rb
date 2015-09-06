@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
-private
+  private
 
   def not_found(error)
     render json: {
@@ -9,6 +9,6 @@ private
         status: '404',
         title: 'Record not found',
         detail: error.message
-    }]}, status: :not_found
+      }] }, status: :not_found
   end
 end
