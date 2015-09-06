@@ -19,3 +19,7 @@ group :development, :test do
   gem 'shoulda-matchers'
   gem 'rspec-rails'
 end
+
+group :test do
+  gem 'factory_girl_rails'
+end
