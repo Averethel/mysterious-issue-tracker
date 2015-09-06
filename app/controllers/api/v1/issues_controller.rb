@@ -114,7 +114,7 @@ class Api::V1::IssuesController < ApplicationController
   #   resp = conn.post("/api/v1/issues/", {issue: {title: 'No comments'})
   #
   #   resp.status
-  #   => 200
+  #   => 422
   #
   #   resp.body
   #   => {
