@@ -1,5 +1,7 @@
 class Api::V1::IssuesController < ApplicationController
-  before_action :set_issue, only: [:show]
+  before_action :set_issue, only: [:show, :update]
+  rescue_from ActionController::ParameterMissing, with: :invalid_params
+
   ## Returns a list of issues
   #
   # GET /api/v1/issues
@@ -136,15 +138,66 @@ class Api::V1::IssuesController < ApplicationController
     if @issue.save
       render json: @issue, status: :created, location: api_v1_issue_url(@issue)
     else
-      render json: {
-        errors: @issue.errors.map do |field, message|
-          {
-            status: '422',
-            title: "Invalid #{field}",
-            detail: message
-          }
-        end
-      }, status: :unprocessable_entity
+      validation_errors(@issue.errors)
+    end
+  rescue ArgumentError => e
+    invalid_params(e)
+  end
+
+  ## Updates an issue
+  #
+  # PATCH /api/v1/issues/:id
+  #
+  # body parameters:
+  #   issue[tite]: STRING
+  #   issue[description]: STRING
+  #   issue[priority]: STRING, [minor, major, critical, blocker]
+  #   issue[status]: STRING, [open, in_progress, fixed, rejected]
+  #
+  # = Examples
+  #
+  #   resp = conn.patch("/api/v1/issues/1", {issue: {title: 'No comments', description: 'Can\'t comment issues', priority: 'major'}})
+  #
+  #   resp.status
+  #   => 422
+  #
+  #   resp.body
+  #   =>  {
+  #         "data":{
+  #           "id":"1",
+  #           "type":"issues",
+  #           "attributes":{
+  #             "title":"No comments",
+  #             "description":"Can't comment issues",
+  #             "priority":"major",
+  #             "status":"open",
+  #             "created_at":"2015-09-06T15:53:51.594Z",
+  #             "updated_at":"2015-09-06T15:53:51.594Z"
+  #           }
+  #         }
+  #       }
+  #
+  #   resp = conn.patch("/api/v1/issues/1", {issue: {title: ''})
+  #
+  #   resp.status
+  #   => 200
+  #
+  #   resp.body
+  #   => {
+  #        "errors":[
+  #          {
+  #            "status":"422",
+  #            "title":"Invalid title",
+  #            "detail":"can't be blank"
+  #          }
+  #        ]
+  #      }
+  def update
+    res = @issue.update_attributes(issue_params)
+    if res
+      render json: @issue, status: :created, location: api_v1_issue_url(@issue)
+    else
+      validation_errors(@issue.errors)
     end
   rescue ArgumentError => e
     invalid_params(e)
@@ -156,7 +209,7 @@ private
   end
 
   def issue_params
-    params.require(:issue).permit(:title, :description, :priority)
+    params.require(:issue).permit(:title, :description, :priority, :status)
   end
 
   def invalid_params(error)
@@ -166,5 +219,17 @@ private
         title: "Invalid JSON submitted",
         detail: error.message
     }]}, status: :unprocessable_entity
+  end
+
+  def validation_errors(errors)
+    render json: {
+      errors: errors.map do |field, message|
+        {
+          status: '422',
+          title: "Invalid #{field}",
+          detail: message
+        }
+      end
+    }, status: :unprocessable_entity
   end
 end

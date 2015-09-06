@@ -19,6 +19,41 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    let!(:issue){ FactoryGirl.create(:issue) }
+
+    context 'with valid params' do
+      let(:valid_attributes) {{
+        title: 'No comments'
+      }}
+
+      it 'changes the Issue' do
+        expect {
+          patch :update, {id: issue.id, issue: valid_attributes};
+        }.to change{
+          Issue.find(issue.id).title
+        }.to('No comments')
+      end
+
+      it 'assigns a newly created issue as @issue' do
+        patch :update, {id: issue.id, issue: valid_attributes}
+        expect(assigns(:issue)).to be_a(Issue)
+        expect(assigns(:issue)).to be_persisted
+      end
+    end
+
+    context 'with invalid params' do
+      let(:invalid_attributes) {{
+        title: ''
+      }}
+
+      it 'assigns an issue as @issue' do
+        patch :update, {id: issue.id, issue: invalid_attributes}
+        expect(assigns(:issue)).to be_a(Issue)
+      end
+    end
+  end
+
   describe 'POST #create' do
     context 'with valid params' do
       let(:valid_attributes) {{
