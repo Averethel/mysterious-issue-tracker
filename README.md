@@ -76,3 +76,63 @@
         }
       }
 ```
+
+## Create an issue
+### POST /api/v1/issues
+#### body parameters:
+  * `issue[tite]`: STRING, required
+  * `issue[description]`: STRING, required
+  * `issue[priority]`: STRING, required, [minor, major, critical, blocker]
+
+#### Examples
+```
+  resp = conn.post("/api/v1/issues/", {issue: {title: 'No comments', description: 'Can\'t comment issues', priority: 'critical'}})
+```
+
+```
+  resp.status
+  => 200
+```
+
+```
+  resp.body
+  =>  {
+        "data":{
+          "id":"2",
+          "type":"issues",
+          "attributes":{
+            "title":"No comments",
+            "description":"Can't comment issues",
+            "priority":"critical",
+            "status":"open",
+            "created_at":"2015-09-06T15:53:51.594Z",
+            "updated_at":"2015-09-06T15:53:51.594Z"
+          }
+        }
+      }
+```
+
+```
+  resp = conn.post("/api/v1/issues/", {issue: {title: 'No comments'})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+        "errors":[
+          {
+            "status":"422",
+            "title":"Invalid description",
+            "detail":"can't be blank"
+          },
+          {
+            "status":"422",
+            "title":"Invalid priority",
+            "detail":"can't be blank"
+          }
+        ]
+      }
+```
