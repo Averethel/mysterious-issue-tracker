@@ -46,3 +46,33 @@
         }
       }
 ```
+
+## Get single issue
+### GET /api/v1/issues/:id
+#### Example
+```
+  resp = conn.get("/api/v1/issues/1")
+```
+
+```
+  resp.status
+  => 200
+```
+
+```
+  resp.body
+  =>  {
+        "data":{
+          "id":"1",
+          "type":"issues",
+          "attributes":{
+            "title":"Test issue",
+            "description":"Just testing",
+            "priority":"minor",
+            "status":"open",
+            "created_at":"2015-09-06T15:53:51.594Z",
+            "updated_at":"2015-09-06T15:53:51.594Z"
+          }
+        }
+      }
+```
