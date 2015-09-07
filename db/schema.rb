@@ -11,19 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_150_906_151_931) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension 'plpgsql'
+ActiveRecord::Schema.define(version: 20150906204548) do
 
-  create_table 'issues', force: :cascade do |t|
-    t.string 'title', null: false
-    t.text 'description', null: false
-    t.integer 'priority', null: false
-    t.integer 'status', default: 0, null: false
-    t.datetime 'created_at',              null: false
-    t.datetime 'updated_at',              null: false
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "comments", force: :cascade do |t|
+    t.text     "body",       null: false
+    t.integer  "issue_id",   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  add_index 'issues', ['priority'], name: 'index_issues_on_priority', using: :btree
-  add_index 'issues', ['status'], name: 'index_issues_on_status', using: :btree
+  add_index "comments", ["issue_id"], name: "index_comments_on_issue_id", using: :btree
+
+  create_table "issues", force: :cascade do |t|
+    t.string   "title",                   null: false
+    t.text     "description",             null: false
+    t.integer  "priority",                null: false
+    t.integer  "status",      default: 0, null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  add_index "issues", ["priority"], name: "index_issues_on_priority", using: :btree
+  add_index "issues", ["status"], name: "index_issues_on_status", using: :btree
+
+  add_foreign_key "comments", "issues"
 end
