@@ -1,4 +1,6 @@
 class Issue < ActiveRecord::Base
+  has_many :comments
+
   enum priority: [:minor, :major, :critical, :blocker]
   enum status: [:open, :in_progress, :fixed, :rejected]
 

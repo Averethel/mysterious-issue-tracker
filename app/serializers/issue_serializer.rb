@@ -6,4 +6,6 @@ class IssueSerializer < ActiveModel::Serializer
              :status,
              :created_at,
              :updated_at
+
+  has_many :comments
 end

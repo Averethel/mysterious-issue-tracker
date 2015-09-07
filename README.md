@@ -26,6 +26,16 @@
               "status":"open",
               "created_at":"2015-09-06T15:53:51.594Z",
               "updated_at":"2015-09-06T15:53:51.594Z"
+            },
+            "relationships": {
+              "comments": {
+                "data": [
+                  {
+                    "type": "comments",
+                    "id": "1"
+                  }
+                ]
+              }
             }
           },
           {
@@ -38,6 +48,11 @@
               "status":"open",
               "created_at":"2015-09-06T16:02:25.640Z",
               "updated_at":"2015-09-06T16:02:25.640Z"
+            },
+            "relationships": {
+              "comments": {
+                "data": []
+              }
             }
           }
         ],
@@ -72,6 +87,11 @@
             "status":"open",
             "created_at":"2015-09-06T15:53:51.594Z",
             "updated_at":"2015-09-06T15:53:51.594Z"
+          },
+          "relationships": {
+            "comments": {
+              "data": []
+            }
           }
         }
       }
@@ -91,7 +111,7 @@
 
 ```
   resp.status
-  => 200
+  => 201
 ```
 
 ```
@@ -107,6 +127,11 @@
             "status":"open",
             "created_at":"2015-09-06T15:53:51.594Z",
             "updated_at":"2015-09-06T15:53:51.594Z"
+          },
+          "relationships": {
+            "comments": {
+              "data": []
+            }
           }
         }
       }
@@ -151,7 +176,7 @@
 ```
 ```
   resp.status
-  => 422
+  => 200
 ```
 ```
   resp.body
@@ -166,6 +191,11 @@
             "status":"open",
             "created_at":"2015-09-06T15:53:51.594Z",
             "updated_at":"2015-09-06T15:53:51.594Z"
+          },
+          "relationships": {
+            "comments": {
+              "data": []
+            }
           }
         }
       }
@@ -195,6 +225,205 @@
 #### Examples
 ```
   resp = conn.delete("/api/v1/issues/1")
+```
+```
+  resp.status
+  => 204
+```
+
+## List of comments for given issue
+### GET /api/v1/issues/1/comments
+#### Example
+```
+  resp = conn.get("/api/v1/issues/:issue_id/comments")
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+         "data": [
+           {
+             "id": "1",
+             "type": "comments",
+             "attributes": {
+               "body": "This is important"
+             },
+             "relationships": {
+               "issue": {
+                 "data": {
+                   "type": "issues",
+                   "id": "1"
+                 }
+               }
+             }
+           },
+           {
+             "id": "2",
+             "type": "comments",
+             "attributes": {
+               "body": "+1"
+             },
+             "relationships": {
+               "issue": {
+                 "data": {
+                   "type": "issues",
+                   "id": "1"
+                 }
+               }
+             }
+           }
+         ],
+         "meta": {
+           "total": 2
+         }
+       }
+```
+
+## Get single comment
+### GET /api/v1/comments/:id
+#### Example
+```
+  resp = conn.get("/api/v1/comments/1")
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+        "data": {
+          "id": "1",
+          "type": "comments",
+          "attributes": {
+            "body": "foo"
+          },
+          "relationships": {
+            "issue": {
+              "data": {
+                "type": "issues",
+                "id": "1"
+              }
+            }
+          }
+        }
+      }
+```
+
+## Comment on given issue
+### POST /api/v1/issues/:issue_id/comments
+#### body parameters:
+  * `comment[body]`: STRING
+
+#### Examples
+```
+  resp = conn.post("/api/v1/issues/1/comments", {comment: {body: '+1'}})
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+        "data": {
+          "id": "1",
+          "type": "comments",
+          "attributes": {
+            "body": "+1"
+          },
+          "relationships": {
+            "issue": {
+              "data": {
+                "type": "issues",
+                "id": "1"
+              }
+            }
+          }
+        }
+      }
+```
+```
+  resp = conn.post("/api/v1/issues/1/comments", {comment: {body: ''})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+        "errors":[
+          {
+            "status":"422",
+            "title":"Invalid body",
+            "detail":"can't be blank"
+          }
+        ]
+      }
+```
+
+## Update a comment
+### PATCH /api/v1/comments/:id
+#### body parameters:
+* `comment[body]`: STRING
+
+#### Examples
+```
+  resp = conn.patch("/api/v1/comments/1", {comment: {body: '+1'}})
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+        "data": {
+          "id": "1",
+          "type": "comments",
+          "attributes": {
+            "body": "foo"
+          },
+          "relationships": {
+            "issue": {
+              "data": {
+                "type": "issues",
+                "id": "1"
+              }
+            }
+          }
+        }
+      }
+```
+```
+  resp = conn.patch("/api/v1/comments/1", {comment: {body: ''})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+       "errors":[
+         {
+           "status":"422",
+           "title":"Invalid body",
+           "detail":"can't be blank"
+         }
+       ]
+     }
+```
+
+## Delete a comment
+### DELETE /comments/:id
+### Examples
+```
+  resp = conn.delete("/api/v1/comments/1")
 ```
 ```
   resp.status
