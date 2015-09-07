@@ -230,3 +230,54 @@
   resp.status
   => 204
 ```
+
+## List of comments for given issue
+### GET /api/v1/issues/1/comments
+#### Example
+```
+  resp = conn.get("/api/v1/issues/1/comments")
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+         "data": [
+           {
+             "id": "1",
+             "type": "comments",
+             "attributes": {
+               "body": "This is important"
+             },
+             "relationships": {
+               "issue": {
+                 "data": {
+                   "type": "issues",
+                   "id": "2"
+                 }
+               }
+             }
+           },
+           {
+             "id": "2",
+             "type": "comments",
+             "attributes": {
+               "body": "+1"
+             },
+             "relationships": {
+               "issue": {
+                 "data": {
+                   "type": "issues",
+                   "id": "2"
+                 }
+               }
+             }
+           }
+         ],
+         "meta": {
+           "total": 2
+         }
+       }
+```
