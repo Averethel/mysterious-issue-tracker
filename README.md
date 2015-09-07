@@ -176,7 +176,7 @@
 ```
 ```
   resp.status
-  => 422
+  => 200
 ```
 ```
   resp.body
@@ -311,4 +311,57 @@
           }
         }
       }
+```
+
+## Update a Comment
+### PATCH /api/v1/comments/:id
+#### body parameters:
+* `comment[body]`: STRING
+
+#### Examples
+```
+  resp = conn.patch("/api/v1/comments/1", {comment: {body: '+1'}})
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+        "data": {
+          "id": "1",
+          "type": "comments",
+          "attributes": {
+            "body": "foo"
+          },
+          "relationships": {
+            "issue": {
+              "data": {
+                "type": "issues",
+                "id": "2"
+              }
+            }
+          }
+        }
+      }
+```
+```
+  resp = conn.patch("/api/v1/comments/1", {comment: {body: ''})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+       "errors":[
+         {
+           "status":"422",
+           "title":"Invalid body",
+           "detail":"can't be blank"
+         }
+       ]
+     }
 ```

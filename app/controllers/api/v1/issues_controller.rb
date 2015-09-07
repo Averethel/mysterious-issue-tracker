@@ -1,8 +1,6 @@
 class Api::V1::IssuesController < ApplicationController
   before_action :set_issue, only: [:show, :update, :destroy]
 
-  rescue_from ActionController::ParameterMissing, with: :invalid_params
-
   ## Returns a list of issues
   #
   # GET /api/v1/issues
@@ -185,7 +183,7 @@ class Api::V1::IssuesController < ApplicationController
   #   resp = conn.patch("/api/v1/issues/1", {issue: {title: 'No comments', description: 'Can\'t comment issues', priority: 'major'}})
   #
   #   resp.status
-  #   => 422
+  #   => 200
   #
   #   resp.body
   #   =>  {
@@ -211,7 +209,7 @@ class Api::V1::IssuesController < ApplicationController
   #   resp = conn.patch("/api/v1/issues/1", {issue: {title: ''})
   #
   #   resp.status
-  #   => 200
+  #   => 422
   #
   #   resp.body
   #   => {
@@ -224,8 +222,7 @@ class Api::V1::IssuesController < ApplicationController
   #        ]
   #      }
   def update
-    res = @issue.update_attributes(issue_params)
-    if res
+    if @issue.update_attributes(issue_params)
       render json: @issue
     else
       validation_errors(@issue.errors)
@@ -258,26 +255,5 @@ class Api::V1::IssuesController < ApplicationController
 
   def issue_params
     params.require(:issue).permit(:title, :description, :priority, :status)
-  end
-
-  def invalid_params(error)
-    render json: {
-      errors: [{
-        status: '422',
-        title: 'Invalid JSON submitted',
-        detail: error.message
-      }] }, status: :unprocessable_entity
-  end
-
-  def validation_errors(errors)
-    render json: {
-      errors: errors.map do |field, message|
-        {
-          status: '422',
-          title: "Invalid #{field}",
-          detail: message
-        }
-      end
-    }, status: :unprocessable_entity
   end
 end

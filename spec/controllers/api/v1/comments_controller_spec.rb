@@ -19,4 +19,43 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       expect(assigns(:comment)).to eq(comment)
     end
   end
+
+  describe 'PATCH #update' do
+    let!(:comment) { FactoryGirl.create(:comment) }
+
+    context 'with valid params' do
+      let(:valid_attributes) do
+        {
+          body: '+1'
+        }
+      end
+
+      it 'changes the Comment' do
+        expect do
+          patch :update, id: comment.id, comment: valid_attributes
+        end.to change{
+          Comment.find(comment.id).body
+        }.to('+1')
+      end
+
+      it 'assigns a newly created comment as @comment' do
+        patch :update, id: comment.id, comment: valid_attributes
+        expect(assigns(:comment)).to be_a(Comment)
+        expect(assigns(:comment)).to be_persisted
+      end
+    end
+
+    context 'with invalid params' do
+      let(:invalid_attributes) do
+        {
+          body: ''
+        }
+      end
+
+      it 'assigns an comment as @comment' do
+        patch :update, id: comment.id, comment: invalid_attributes
+        expect(assigns(:comment)).to be_a(Comment)
+      end
+    end
+  end
 end
