@@ -26,6 +26,16 @@
               "status":"open",
               "created_at":"2015-09-06T15:53:51.594Z",
               "updated_at":"2015-09-06T15:53:51.594Z"
+            },
+            "relationships": {
+              "comments": {
+                "data": [
+                  {
+                    "type": "comments",
+                    "id": "1"
+                  }
+                ]
+              }
             }
           },
           {
@@ -38,6 +48,11 @@
               "status":"open",
               "created_at":"2015-09-06T16:02:25.640Z",
               "updated_at":"2015-09-06T16:02:25.640Z"
+            },
+            "relationships": {
+              "comments": {
+                "data": []
+              }
             }
           }
         ],
@@ -72,6 +87,11 @@
             "status":"open",
             "created_at":"2015-09-06T15:53:51.594Z",
             "updated_at":"2015-09-06T15:53:51.594Z"
+          },
+          "relationships": {
+            "comments": {
+              "data": []
+            }
           }
         }
       }
@@ -91,7 +111,7 @@
 
 ```
   resp.status
-  => 200
+  => 201
 ```
 
 ```
@@ -107,6 +127,11 @@
             "status":"open",
             "created_at":"2015-09-06T15:53:51.594Z",
             "updated_at":"2015-09-06T15:53:51.594Z"
+          },
+          "relationships": {
+            "comments": {
+              "data": []
+            }
           }
         }
       }
@@ -166,6 +191,11 @@
             "status":"open",
             "created_at":"2015-09-06T15:53:51.594Z",
             "updated_at":"2015-09-06T15:53:51.594Z"
+          },
+          "relationships": {
+            "comments": {
+              "data": []
+            }
           }
         }
       }

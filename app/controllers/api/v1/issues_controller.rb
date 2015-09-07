@@ -26,7 +26,12 @@ class Api::V1::IssuesController < ApplicationController
   #               "priority":"minor",
   #               "status":"open",
   #               "created_at":"2015-09-06T15:53:51.594Z",
-  #               "updated_at":"2015-09-06T15:53:51.594Z"
+  #               "updated_at":"2015-09-06T15:53:51.594Z",
+  #             },
+  #             "relationships": {
+  #               "comments": {
+  #                 "data": []
+  #               }
   #             }
   #           },
   #           {
@@ -38,7 +43,17 @@ class Api::V1::IssuesController < ApplicationController
   #               "priority":"major",
   #               "status":"open",
   #               "created_at":"2015-09-06T16:02:25.640Z",
-  #               "updated_at":"2015-09-06T16:02:25.640Z"
+  #               "updated_at":"2015-09-06T16:02:25.640Z",
+  #             },
+  #             "relationships": {
+  #               "comments": {
+  #                 "data": [
+  #                   {
+  #                     "type": "comments",
+  #                     "id": "1"
+  #                   }
+  #                 ]
+  #               }
   #             }
   #           }
   #         ],
@@ -75,6 +90,11 @@ class Api::V1::IssuesController < ApplicationController
   #             "status":"open",
   #             "created_at":"2015-09-06T15:53:51.594Z",
   #             "updated_at":"2015-09-06T15:53:51.594Z"
+  #           },
+  #           "relationships": {
+  #             "comments": {
+  #               "data": []
+  #             }
   #           }
   #         }
   #       }
@@ -96,7 +116,7 @@ class Api::V1::IssuesController < ApplicationController
   #   resp = conn.post("/api/v1/issues/", {issue: {title: 'No comments', description: 'Can\'t comment issues', priority: 'critical'}})
   #
   #   resp.status
-  #   => 200
+  #   => 201
   #
   #   resp.body
   #   =>  {
@@ -110,6 +130,11 @@ class Api::V1::IssuesController < ApplicationController
   #             "status":"open",
   #             "created_at":"2015-09-06T15:53:51.594Z",
   #             "updated_at":"2015-09-06T15:53:51.594Z"
+  #           },
+  #           "relationships": {
+  #             "comments": {
+  #               "data": []
+  #             }
   #           }
   #         }
   #       }
@@ -174,6 +199,11 @@ class Api::V1::IssuesController < ApplicationController
   #             "status":"open",
   #             "created_at":"2015-09-06T15:53:51.594Z",
   #             "updated_at":"2015-09-06T15:53:51.594Z"
+  #           },
+  #           "relationships": {
+  #             "comments": {
+  #               "data": []
+  #             }
   #           }
   #         }
   #       }
@@ -196,7 +226,7 @@ class Api::V1::IssuesController < ApplicationController
   def update
     res = @issue.update_attributes(issue_params)
     if res
-      render json: @issue, status: :created, location: api_v1_issue_url(@issue)
+      render json: @issue
     else
       validation_errors(@issue.errors)
     end
