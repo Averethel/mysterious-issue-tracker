@@ -58,4 +58,14 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    let!(:comment) { FactoryGirl.create(:comment) }
+
+    it 'destroys the requested comment' do
+      expect do
+        delete :destroy, id: comment.to_param
+      end.to change(Comment, :count).by(-1)
+    end
+  end
 end

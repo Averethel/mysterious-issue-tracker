@@ -365,3 +365,14 @@
        ]
      }
 ```
+
+## Delete a comment
+### DELETE /comments/:id
+### Examples
+```
+  resp = conn.delete("/api/v1/comments/1")
+```
+```
+  resp.status
+  => 204
+```

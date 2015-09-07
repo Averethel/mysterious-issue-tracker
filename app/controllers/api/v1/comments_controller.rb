@@ -1,6 +1,7 @@
 class Api::V1::CommentsController < ApplicationController
   before_action :set_issue, only: [:index]
-  before_action :set_comment, only: [:show, :update]
+  before_action :set_comment, only: [:show, :update, :destroy]
+
   ## Returns a list of comments for given issue
   #
   # GET /api/v1/issues/:issue_id/comments
@@ -143,6 +144,23 @@ class Api::V1::CommentsController < ApplicationController
       validation_errors(@comment.errors)
     end
   end
+
+  ## Deletes a comment
+  #
+  # DELETE /comments/:id
+  #
+  # = Examples
+  #
+  #   resp = conn.delete("/api/v1/comments/1")
+  #
+  #   resp.status
+  #   => 204
+  def destroy
+    @comment.destroy
+
+    head :no_content
+  end
+
   private
 
   def set_issue
