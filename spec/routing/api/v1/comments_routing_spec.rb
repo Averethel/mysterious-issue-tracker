@@ -13,8 +13,8 @@ RSpec.describe Api::V1::CommentsController, type: :routing do
     end
 
     it 'routes to #create' do
-      expect(post: '/api/v1/comments')
-        .to route_to('api/v1/comments#create', format: :json)
+      expect(post: '/api/v1/issues/1/comments')
+        .to route_to('api/v1/comments#create', issue_id: '1', format: :json)
     end
 
     it 'routes to #update via PUT' do

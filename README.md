@@ -255,7 +255,7 @@
                "issue": {
                  "data": {
                    "type": "issues",
-                   "id": "2"
+                   "id": "1"
                  }
                }
              }
@@ -270,7 +270,7 @@
                "issue": {
                  "data": {
                    "type": "issues",
-                   "id": "2"
+                   "id": "1"
                  }
                }
              }
@@ -305,7 +305,7 @@
             "issue": {
               "data": {
                 "type": "issues",
-                "id": "2"
+                "id": "1"
               }
             }
           }
@@ -313,7 +313,60 @@
       }
 ```
 
-## Update a Comment
+## Comment on given issue
+### POST /api/v1/issues/:issue_id/comments
+#### body parameters:
+  * `comment[body]`: STRING
+
+#### Examples
+```
+  resp = conn.post("/api/v1/issues/1/comments", {comment: {body: '+1'}})
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+        "data": {
+          "id": "1",
+          "type": "comments",
+          "attributes": {
+            "body": "+1"
+          },
+          "relationships": {
+            "issue": {
+              "data": {
+                "type": "issues",
+                "id": "1"
+              }
+            }
+          }
+        }
+      }
+```
+```
+  resp = conn.post("/api/v1/issues/1/comments", {comment: {body: ''})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+        "errors":[
+          {
+            "status":"422",
+            "title":"Invalid body",
+            "detail":"can't be blank"
+          }
+        ]
+      }
+```
+
+## Update a comment
 ### PATCH /api/v1/comments/:id
 #### body parameters:
 * `comment[body]`: STRING
@@ -339,7 +392,7 @@
             "issue": {
               "data": {
                 "type": "issues",
-                "id": "2"
+                "id": "1"
               }
             }
           }
