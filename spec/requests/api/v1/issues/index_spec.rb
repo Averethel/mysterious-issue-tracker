@@ -7,7 +7,7 @@ RSpec.describe 'Issues', type: :request do
     let(:body) { JSON.parse(response.body) }
 
     before do
-      get api_v1_issues_path
+      get api_v1_issues_path({page: {size: 1}})
     end
 
     context 'metadata' do
@@ -16,13 +16,51 @@ RSpec.describe 'Issues', type: :request do
       it 'includes total' do
         expect(metadata['total']).to eq(2)
       end
+
+      it 'includes current_page' do
+        expect(metadata['current_page']).to eq(1)
+      end
+
+      it 'includes on_page' do
+        expect(metadata['on_page']).to eq(1)
+      end
+
+      it 'includes total_pages' do
+        expect(metadata['total_pages']).to eq(2)
+      end
+    end
+
+    context 'links' do
+      let(:links) { body['links'] }
+
+      it 'includes link to self' do
+        expect(links['self']).
+          to eq(api_v1_issues_url({
+            page: {size: 1, number: 1}
+          }))
+      end
+
+      it 'includes link to next' do
+        expect(links['next']).
+          to eq(api_v1_issues_url({
+            page: {size: 1, number: 2}
+          }))
+      end
+
+
+      it 'includes link to last' do
+        expect(links['last']).
+          to eq(api_v1_issues_url({
+            page: {size: 1, number: 2}
+          }))
+      end
     end
 
     context 'data' do
       let(:data) { body['data'] }
 
-      it 'includes all issues' do
-        expect(data.size).to eq(2)
+      it 'has page sieze issues' do
+        expect(data.size).to eq(1)
       end
 
       context 'for single issue' do

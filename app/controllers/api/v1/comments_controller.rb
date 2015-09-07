@@ -5,6 +5,10 @@ class Api::V1::CommentsController < ApplicationController
   ## Returns a list of comments for given issue
   #
   # GET /api/v1/issues/:issue_id/comments
+  # 
+  # parameters:
+  #   page[size]: INTEGER
+  #   page[number]: INTEGER
   #
   # = Example
   #
@@ -47,14 +51,27 @@ class Api::V1::CommentsController < ApplicationController
   #              }
   #            }
   #          ],
+  #          "links": {
+  #            "self": "http://mysterious-issue-tracker.dev/api/v1/issues/1/comments?page%5Bnumber%5D=1&page%5Bsize%5D=2",
+  #            "next": "http://mysterious-issue-tracker.dev/api/v1/issues/1/comments?page%5Bnumber%5D=2&page%5Bsize%5D=2",
+  #            "last": "http://mysterious-issue-tracker.dev/api/v1/issues/1/comments?page%5Bnumber%5D=2&page%5Bsize%5D=2"
+  #          },
   #          "meta": {
-  #            "total": 2
+  #            "total": 4,
+  #             "current_page": 1,
+  #             "on_page": 2,
+  #             "total_pages": 2
   #          }
   #        }
   def index
-    @comments = @issue.comments
+    @comments = @issue.comments.page(params[:page][:number]).per(params[:page][:size])
 
-    render json: @comments, meta: { total: @comments.count }
+    render json: @comments, meta: {
+      total: @issue.comments.count,
+      current_page: @comments.current_page,
+      on_page: @comments.size,
+      total_pages: @comments.total_pages
+    }
   end
 
   ## Returns single comment

@@ -4,8 +4,10 @@ gem 'rails', '~> 4.2.4'
 gem 'rails-api'
 gem 'pg'
 
-gem 'active_model_serializers', '~> 0.10.0.rc2'
+gem 'active_model_serializers', git: 'https://github.com/rails-api/active_model_serializers.git'
 gem 'unicorn'
+
+gem 'kaminari'
 
 group :development do
   gem 'spring'

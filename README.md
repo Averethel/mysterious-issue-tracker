@@ -2,6 +2,10 @@
 
 ## List issues
 ### GET /api/v1/issues
+#### parameters:
+  * `page[size]`: INTEGER
+  * `page[number]`: INTEGER
+
 #### Example
 ```
   resp = conn.get("/api/v1/issues")
@@ -56,8 +60,16 @@
             }
           }
         ],
-        "meta":{
-          "total":2
+        "links": {
+          "self": "http://mysterious-issue-tracker.dev/api/v1/issues/1?page%5Bnumber%5D=1&page%5Bsize%5D=2",
+          "next": "http://mysterious-issue-tracker.dev/api/v1/issues/1?page%5Bnumber%5D=2&page%5Bsize%5D=2",
+          "last": "http://mysterious-issue-tracker.dev/api/v1/issues/1?page%5Bnumber%5D=2&page%5Bsize%5D=2"
+        },
+        "meta": {
+          "total": 4,
+           "current_page": 1,
+           "on_page": 2,
+           "total_pages": 2
         }
       }
 ```
@@ -233,6 +245,10 @@
 
 ## List of comments for given issue
 ### GET /api/v1/issues/1/comments
+#### parameters:
+  * `page[size]`: INTEGER
+  * `page[number]`: INTEGER
+
 #### Example
 ```
   resp = conn.get("/api/v1/issues/:issue_id/comments")
@@ -276,9 +292,18 @@
              }
            }
          ],
+         "links": {
+           "self": "http://mysterious-issue-tracker.dev/api/v1/issues/1/comments?page%5Bnumber%5D=1&page%5Bsize%5D=2",
+           "next": "http://mysterious-issue-tracker.dev/api/v1/issues/1/comments?page%5Bnumber%5D=2&page%5Bsize%5D=2",
+           "last": "http://mysterious-issue-tracker.dev/api/v1/issues/1/comments?page%5Bnumber%5D=2&page%5Bsize%5D=2"
+         },
          "meta": {
-           "total": 2
+           "total": 4,
+            "current_page": 1,
+            "on_page": 2,
+            "total_pages": 2
          }
+
        }
 ```
 
