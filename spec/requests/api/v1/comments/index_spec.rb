@@ -7,7 +7,7 @@ RSpec.describe 'Comments', type: :request do
     let(:body) { JSON.parse(response.body) }
 
     before do
-      get api_v1_issue_comments_path(issue)
+      get api_v1_issue_comments_path(issue, page: {size: 1})
     end
 
     context 'metadata' do
@@ -16,19 +16,56 @@ RSpec.describe 'Comments', type: :request do
       it 'includes total' do
         expect(metadata['total']).to eq(2)
       end
+      it 'includes current_page' do
+        expect(metadata['current_page']).to eq(1)
+      end
+
+      it 'includes on_page' do
+        expect(metadata['on_page']).to eq(1)
+      end
+
+      it 'includes total_pages' do
+        expect(metadata['total_pages']).to eq(2)
+      end
+    end
+
+    context 'links' do
+      let(:links) { body['links'] }
+
+      it 'includes link to self' do
+        expect(links['self']).
+          to eq(api_v1_issue_comments_url(issue, {
+            page: {size: 1, number: 1}
+          }))
+      end
+
+      it 'includes link to next' do
+        expect(links['next']).
+          to eq(api_v1_issue_comments_url(issue, {
+            page: {size: 1, number: 2}
+          }))
+      end
+
+
+      it 'includes link to last' do
+        expect(links['last']).
+          to eq(api_v1_issue_comments_url(issue, {
+            page: {size: 1, number: 2}
+          }))
+      end
     end
 
     context 'data' do
       let(:data) { body['data'] }
 
-      it 'includes all comments' do
-        expect(data.size).to eq(2)
+      it 'has page size comments' do
+        expect(data.size).to eq(1)
       end
 
       context 'for single issue' do
         let(:issue_data) { data.first }
         let(:attributes) { issue_data['attributes'] }
-        let(:comment) { issue.comments.first }
+        let(:comment) { issue.comments.last }
 
         it 'includes id' do
           expect(issue_data['id']).to eq(comment.id.to_s)

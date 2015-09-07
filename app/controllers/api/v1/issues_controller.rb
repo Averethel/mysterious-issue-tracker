@@ -5,6 +5,10 @@ class Api::V1::IssuesController < ApplicationController
   #
   # GET /api/v1/issues
   #
+  # parameters:
+  #   page[size]: INTEGER
+  #   page[number]: INTEGER
+  #
   # = Example
   #
   #   resp = conn.get("/api/v1/issues")
@@ -55,14 +59,27 @@ class Api::V1::IssuesController < ApplicationController
   #             }
   #           }
   #         ],
-  #         "meta":{
-  #           "total":2
-  #         }
+  #          "links": {
+  #            "self": "http://mysterious-issue-tracker.dev/api/v1/issues?page%5Bnumber%5D=1&page%5Bsize%5D=2",
+  #            "next": "http://mysterious-issue-tracker.dev/api/v1/issues?page%5Bnumber%5D=2&page%5Bsize%5D=2",
+  #            "last": "http://mysterious-issue-tracker.dev/api/v1/issues?page%5Bnumber%5D=2&page%5Bsize%5D=2"
+  #          },
+  #          "meta": {
+  #            "total": 2,
+  #             "current_page": 1,
+  #             "on_page": 2,
+  #             "total_pages": 2
+  #          }
   #       }
   def index
-    @issues = Issue.all
+    @issues = Issue.page(params[:page][:number]).per(params[:page][:size])
 
-    render json: @issues, meta: { total: @issues.count }
+    render json: @issues, meta: {
+      total: Issue.count,
+      current_page: @issues.current_page,
+      on_page: @issues.size,
+      total_pages: @issues.total_pages
+    }
   end
 
   ## Returns single issue

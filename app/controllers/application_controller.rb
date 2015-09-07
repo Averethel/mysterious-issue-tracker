@@ -1,8 +1,14 @@
 class ApplicationController < ActionController::API
+  before_action :prepare_page_params, only: [:index]
+
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from ActionController::ParameterMissing, with: :invalid_params
 
   private
+
+  def prepare_page_params
+    params[:page] ||= {}
+  end
 
   def not_found(error)
     render json: {
