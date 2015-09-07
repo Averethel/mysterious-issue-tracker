@@ -235,7 +235,7 @@
 ### GET /api/v1/issues/1/comments
 #### Example
 ```
-  resp = conn.get("/api/v1/issues/1/comments")
+  resp = conn.get("/api/v1/issues/:issue_id/comments")
 ```
 ```
   resp.status
@@ -280,4 +280,35 @@
            "total": 2
          }
        }
+```
+
+## Get single comment
+### GET /api/v1/comments/:id
+#### Example
+```
+  resp = conn.get("/api/v1/comments/1")
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+        "data": {
+          "id": "1",
+          "type": "comments",
+          "attributes": {
+            "body": "foo"
+          },
+          "relationships": {
+            "issue": {
+              "data": {
+                "type": "issues",
+                "id": "2"
+              }
+            }
+          }
+        }
+      }
 ```

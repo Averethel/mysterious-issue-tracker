@@ -10,4 +10,13 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       expect(assigns(:comments)).to eq(issue.comments)
     end
   end
+
+  describe 'GET #show' do
+    let!(:comment) { FactoryGirl.create(:comment) }
+
+    it 'assigns the requested comment as @comment' do
+      get :show, {id: comment.to_param}
+      expect(assigns(:comment)).to eq(comment)
+    end
+  end
 end
