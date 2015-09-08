@@ -142,6 +142,7 @@ HTTP Basic Auth (ommited in examples)
   * `user[password_confirmation]`: STRING, required
   * `user[name]`: STRING
   * `user[surname]`: STRING
+  * `user[role]`: STRING, [user, admin], as admin only
 
 #### Examples
 ```
@@ -205,6 +206,7 @@ HTTP Basic Auth (ommited in examples)
   * `user[password_confirmation]`: STRING
   * `user[name]`: STRING
   * `user[surname]`: STRING
+  * `user[role]`: STRING, [user, admin], as admin only
 
 #### Examples
 ```

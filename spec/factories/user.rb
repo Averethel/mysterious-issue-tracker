@@ -5,5 +5,14 @@ FactoryGirl.define do
     surname { username.capitalize }
     password 'password'
     password_confirmation { password }
+    role :user
+
+    factory :guest do
+      role nil
+    end
+
+    factory :admin do
+      role :admin
+    end
   end
 end
