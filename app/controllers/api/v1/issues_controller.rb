@@ -1,5 +1,5 @@
 class Api::V1::IssuesController < ApplicationController
-  before_action :set_issue, only: [:show, :update, :destroy]
+  before_action :set_issue, only: [:show, :update, :destroy, :take]
 
   ## Returns a list of issues
   #
@@ -232,6 +232,56 @@ class Api::V1::IssuesController < ApplicationController
   rescue ArgumentError => e
     skip_authorization
     invalid_params(e)
+  end
+
+  ## Assigns the issue to current_user
+  #
+  # PATCH /api/v1/issues/:id/take
+  #
+  # = Examples
+  #
+  #   resp = conn.patch("/api/v1/issues/1/take")
+  #
+  #   resp.status
+  #   => 200
+  #
+  #   resp.body
+  #   =>  {
+  #         "data":{
+  #           "id":"1",
+  #           "type":"issues",
+  #           "attributes":{
+  #             "title":"No comments",
+  #             "description":"Can't comment issues",
+  #             "priority":"major",
+  #             "status":"open",
+  #             "created_at":"2015-09-06T15:53:51.594Z",
+  #             "updated_at":"2015-09-06T15:53:51.594Z"
+  #           },
+  #           "relationships": {
+  #             "comments": {
+  #               "data": []
+  #             },
+  #            "creator": {
+  #               "data": {
+  #                 "id": "2",
+  #                 "type": "users"
+  #               }
+  #             },
+  #             "assignee": {
+  #               "data": {
+  #                 "id": "1",
+  #                 "type": "users"
+  #               }
+  #             }
+  #           }
+  #         }
+  #       }
+  def take
+    authorize @issue
+    @issue.update_attributes(assignee: current_user)
+
+    render json: @issue
   end
 
   ## Updates an issue

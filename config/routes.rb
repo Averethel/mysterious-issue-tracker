@@ -8,6 +8,11 @@ Rails.application.routes.draw do
       end
 
       resources :issues, except: [:new, :edit] do
+        member do
+          patch :take
+          put :take
+        end
+
         resources :comments, only: [:index, :create]
       end
 

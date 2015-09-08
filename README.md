@@ -616,6 +616,51 @@ Role base system with following permissions
       }
 ```
 
+## Assign the issue to current_user
+### PATCH /api/v1/issues/:id/take
+### Examples
+```
+  resp = conn.patch("/api/v1/issues/1/take")
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+        "data":{
+          "id":"1",
+          "type":"issues",
+          "attributes":{
+            "title":"No comments",
+            "description":"Can't comment issues",
+            "priority":"major",
+            "status":"open",
+            "created_at":"2015-09-06T15:53:51.594Z",
+            "updated_at":"2015-09-06T15:53:51.594Z"
+          },
+          "relationships": {
+            "comments": {
+              "data": []
+            },
+           "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
+            },
+            "assignee": {
+              "data": {
+                "id": "1",
+                "type": "users"
+              }
+            }
+          }
+        }
+      }
+```
+
 ## Update an issue
 ### PATCH /api/v1/issues/:id
 #### body parameters:

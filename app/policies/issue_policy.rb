@@ -3,6 +3,10 @@ class IssuePolicy < ApplicationPolicy
     !user.guest?
   end
 
+  def take?
+    !user.guest?
+  end
+
   def update?
     admin_or_creator?
   end

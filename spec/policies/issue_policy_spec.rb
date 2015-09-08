@@ -11,16 +11,18 @@ describe IssuePolicy do
     it { is_expected.to permit_action(:show) }
 
     it { is_expected.not_to permit_action(:create) }
+    it { is_expected.not_to permit_action(:take) }
     it { is_expected.not_to permit_action(:update) }
     it { is_expected.not_to permit_action(:destroy) }
   end
 
   context 'with user' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactorytGirl.create(:user) }
     let(:creator) { FactoryGirl.create(:user) }
 
     it { is_expected.to permit_action(:show) }
     it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:take) }
 
     context 'for not created issue' do
       it { is_expected.not_to permit_action(:update) }
@@ -41,6 +43,7 @@ describe IssuePolicy do
 
     it { is_expected.to permit_action(:show) }
     it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:take) }
 
     it { is_expected.to permit_action(:update) }
     it { is_expected.to permit_action(:destroy) }
