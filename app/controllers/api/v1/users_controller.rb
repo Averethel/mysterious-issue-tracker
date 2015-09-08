@@ -89,4 +89,67 @@ class Api::V1::UsersController < ApplicationController
   def show
     render json: @user
   end
+
+  ## Creates a user
+  #
+  # POST /api/v1/users
+  #
+  # body parameters:
+  #   user[username]: STRING, required
+  #   user[password]: STRING, required
+  #   user[password_confirmation]: STRING, required
+  #   user[name]: STRING
+  #   user[surname]: STRING
+  #
+  # = Examples
+  #
+  #   resp = conn.post("/api/v1/users/", {user: {username: 'tester', password: 'test', password_confirmation: 'test', name: 'Test', surname: 'Testy'}})
+  #
+  #   resp.status
+  #   => 201
+  #
+  #   resp.body
+  #   =>  {
+  #         "id": "1",
+  #         "type": "users",
+  #         "attributes": {
+  #           "username": "test",
+  #           "name": "Test",
+  #           "surname": "Testy",
+  #           "created_at": "2015-09-08T09:04:51.520Z",
+  #           "updated_at": "2015-09-08T09:04:51.520Z"
+  #         }
+  #       }
+  #
+  #   resp = conn.post("/api/v1/users/", {user: {username: 'tester'})
+  #   resp.status
+  #   => 422
+  #   resp.body
+  #   => {
+  #         "errors":[
+  #           {
+  #             "status":"422",
+  #             "title":"Invalid password",
+  #             "detail":"can't be blank"
+  #           }
+  #         ]
+  #       }
+  def create
+    @user = User.new(user_params)
+
+    if @user.save
+      render json: @user, status: :created, location: api_v1_user_url(@user)
+    else
+      validation_errors(@user.errors)
+    end
+  end
+  private
+
+  def set_user
+    @user = User.find(params[:id])
+  end
+
+  def user_params
+    params.require(:user).permit(:username, :name, :surname, :password, :password_confirmation)
+  end
 end

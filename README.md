@@ -84,6 +84,59 @@
       }
 ```
 
+## Create a user
+### POST /api/v1/users
+#### body parameters:
+  * `user[username]`: STRING, required
+  * `user[password]`: STRING, required
+  * `user[password_confirmation]`: STRING, required
+  * `user[name]`: STRING
+  * `user[surname]`: STRING
+
+#### Examples
+```
+  resp = conn.post("/api/v1/users/", {user: {username: 'tester', password: 'test', password_confirmation: 'test', name: 'Test', surname: 'Testy'}})
+```
+
+```
+  resp.status
+  => 201
+```
+
+```
+  resp.body
+  =>  {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:04:51.520Z"
+        }
+      }
+```
+
+```
+  resp = conn.post("/api/v1/users/", {user: {username: 'tester'})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+        "errors":[
+          {
+            "status":"422",
+            "title":"Invalid password",
+            "detail":"can't be blank"
+          }
+        ]
+      }
+```
 ## List issues
 ### GET /api/v1/issues
 #### parameters:
