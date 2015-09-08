@@ -331,7 +331,6 @@ class Api::V1::IssuesController < ApplicationController
     render json: @issue
   end
 
-
   ## Updates an issue
   #
   # PATCH /api/v1/issues/:id

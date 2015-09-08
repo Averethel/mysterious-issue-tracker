@@ -23,7 +23,7 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
     let!(:issue) { FactoryGirl.create(:issue) }
 
     context 'when authorized' do
-      let(:user){ FactoryGirl.create(:user) }
+      let(:user) { FactoryGirl.create(:user) }
 
       before do
         allow_any_instance_of(ApplicationController)
@@ -102,7 +102,7 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
     end
 
     context 'when authorized' do
-      let(:user){ issue.creator }
+      let(:user) { issue.creator }
 
       before do
         allow_any_instance_of(ApplicationController)
