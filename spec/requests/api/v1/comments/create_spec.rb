@@ -2,11 +2,13 @@ require 'rails_helper'
 
 RSpec.describe 'Comments', type: :request do
   describe 'POST /api/v1/comments' do
+    let!(:user) { FactoryGirl.create(:user, username: 'test', password: 'test') }
     let(:body) { JSON.parse(response.body) }
 
     before do
       issue = FactoryGirl.create(:issue)
-      post api_v1_issue_comments_path(issue.id), params
+      env = { 'HTTP_AUTHORIZATION': ActionController::HttpAuthentication::Basic.encode_credentials('test', 'test') }
+      post api_v1_issue_comments_path(issue.id), params, env
     end
 
     context 'with valid params' do

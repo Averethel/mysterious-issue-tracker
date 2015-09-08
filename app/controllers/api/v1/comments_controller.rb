@@ -34,6 +34,12 @@ class Api::V1::CommentsController < ApplicationController
   #                    "type": "issues",
   #                    "id": "1"
   #                  }
+  #                },
+  #                "creator": {
+  #                  "data": {
+  #                    "id": "2",
+  #                    "type": "users"
+  #                  }
   #                }
   #              }
   #            },
@@ -50,6 +56,12 @@ class Api::V1::CommentsController < ApplicationController
   #                  "data": {
   #                    "type": "issues",
   #                    "id": "1"
+  #                  },
+  #                  "creator": {
+  #                    "data": {
+  #                      "id": "2",
+  #                      "type": "users"
+  #                    }
   #                  }
   #                }
   #              }
@@ -105,6 +117,12 @@ class Api::V1::CommentsController < ApplicationController
   #                 "type": "issues",
   #                 "id": "1"
   #               }
+  #             },
+  #             "creator": {
+  #               "data": {
+  #                 "id": "2",
+  #                 "type": "users"
+  #               }
   #             }
   #           }
   #         }
@@ -116,6 +134,9 @@ class Api::V1::CommentsController < ApplicationController
   ## Creates a comment for given issue
   #
   # POST /api/v1/issues/:issue_id/comments
+  #
+  # restrictions
+  #   must be authenticated
   #
   # body parameters:
   #   comment[body]: STRING
@@ -143,6 +164,12 @@ class Api::V1::CommentsController < ApplicationController
   #                 "type": "issues",
   #                 "id": "1"
   #               }
+  #             },
+  #             "creator": {
+  #               "data": {
+  #                 "id": "2",
+  #                 "type": "users"
+  #               }
   #             }
   #           }
   #         }
@@ -164,7 +191,7 @@ class Api::V1::CommentsController < ApplicationController
   #        ]
   #      }
   def create
-    @comment = @issue.comments.build(comment_params)
+    @comment = @issue.comments.build(comment_params.merge(creator: current_user))
 
     if @comment.save
       render json: @comment, status: :created, location: api_v1_comment_url(@comment)
@@ -202,6 +229,12 @@ class Api::V1::CommentsController < ApplicationController
   #               "data": {
   #                 "type": "issues",
   #                 "id": "2"
+  #               }
+  #             },
+  #             "creator": {
+  #               "data": {
+  #                 "id": "2",
+  #                 "type": "users"
   #               }
   #             }
   #           }

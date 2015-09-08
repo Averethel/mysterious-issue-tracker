@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   validates :password_confirmation, presence: true, if: :changed_password?
 
   has_many :issues, foreign_key: :creator_id
+  has_many :comments, foreign_key: :creator_id
 
   private
 

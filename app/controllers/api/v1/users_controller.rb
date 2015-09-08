@@ -36,6 +36,9 @@ class Api::V1::UsersController < ApplicationController
   #                 "type": "issues"
   #               }
   #             ]
+  #           },
+  #          "comments": {
+  #             "data": []
   #           }
   #         }
   #       },
@@ -57,6 +60,15 @@ class Api::V1::UsersController < ApplicationController
   #                 "type": "issues"
   #               }
   #             ]
+  #           },
+  #          "comments": {
+  #             "data": [
+  #                {
+  #                   "id": "1",
+  #                   "type": "comments"
+  #                 }
+  #               ]
+  #             }
   #           }
   #         }
   #       }
@@ -106,7 +118,7 @@ class Api::V1::UsersController < ApplicationController
   #           "created_at": "2015-09-08T09:04:51.520Z",
   #           "updated_at": "2015-09-08T09:04:51.520Z"
   #         },
-  #          "relationships": {
+  #         "relationships": {
   #           "issues": {
   #             "data": [
   #               {
@@ -114,6 +126,9 @@ class Api::V1::UsersController < ApplicationController
   #                 "type": "issues"
   #               }
   #             ]
+  #           },
+  #           "comments": {
+  #             "data": []
   #           }
   #         }
   #       }
@@ -150,8 +165,11 @@ class Api::V1::UsersController < ApplicationController
   #           "created_at": "2015-09-08T09:04:51.520Z",
   #           "updated_at": "2015-09-08T09:04:51.520Z"
   #         },
-  #          "relationships": {
+  #         "relationships": {
   #           "issues": {
+  #             "data": []
+  #           },
+  #           "comments": {
   #             "data": []
   #           }
   #         }
@@ -208,7 +226,7 @@ class Api::V1::UsersController < ApplicationController
   #           "created_at": "2015-09-08T09:04:51.520Z",
   #           "updated_at": "2015-09-08T09:45:51.520Z"
   #         },
-  #          "relationships": {
+  #         "relationships": {
   #           "issues": {
   #             "data": [
   #               {
@@ -216,6 +234,9 @@ class Api::V1::UsersController < ApplicationController
   #                 "type": "issues"
   #               }
   #             ]
+  #           },
+  #           "comments": {
+  #             "data": []
   #           }
   #         }
   #       }

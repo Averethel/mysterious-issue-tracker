@@ -41,6 +41,9 @@ HTTP Basic Auth (ommited in examples)
                 "type": "issues"
               }
             ]
+          },
+          "comments": {
+            "data": []
           }
         }
       },
@@ -60,6 +63,14 @@ HTTP Basic Auth (ommited in examples)
               {
                 "id": "1",
                 "type": "issues"
+              }
+            ]
+          },
+          "comments": {
+            "data": [
+              {
+                "id": "1",
+                "type": "comments"
               }
             ]
           }
@@ -112,6 +123,9 @@ HTTP Basic Auth (ommited in examples)
                 "type": "issues"
               }
             ]
+          },
+          "comments": {
+            "data": []
           }
         }
       }
@@ -150,6 +164,9 @@ HTTP Basic Auth (ommited in examples)
         },
         "relationships": {
           "issues": {
+            "data": []
+          },
+          "comments": {
             "data": []
           }
         }
@@ -214,6 +231,9 @@ HTTP Basic Auth (ommited in examples)
                 "type": "issues"
               }
             ]
+          },
+          "comments": {
+            "data": []
           }
         }
       }
@@ -556,6 +576,12 @@ HTTP Basic Auth (ommited in examples)
                    "type": "issues",
                    "id": "1"
                  }
+               },
+               "creator": {
+                 "data": {
+                   "id": "2",
+                   "type": "users"
+                 }
                }
              }
            },
@@ -573,6 +599,12 @@ HTTP Basic Auth (ommited in examples)
                    "type": "issues",
                    "id": "1"
                  }
+               },
+               "creator": {
+                 "data": {
+                   "id": "1",
+                   "type": "users"
+                 }
                }
              }
            }
@@ -588,7 +620,6 @@ HTTP Basic Auth (ommited in examples)
             "on_page": 2,
             "total_pages": 2
          }
-
        }
 ```
 
@@ -619,6 +650,12 @@ HTTP Basic Auth (ommited in examples)
                 "type": "issues",
                 "id": "1"
               }
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
             }
           }
         }
@@ -627,6 +664,8 @@ HTTP Basic Auth (ommited in examples)
 
 ## Comment on given issue
 ### POST /api/v1/issues/:issue_id/comments
+#### restrictions
+  must be authenticated
 #### body parameters:
   * `comment[body]`: STRING
 
@@ -654,6 +693,12 @@ HTTP Basic Auth (ommited in examples)
               "data": {
                 "type": "issues",
                 "id": "1"
+              }
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
               }
             }
           }
@@ -709,6 +754,12 @@ HTTP Basic Auth (ommited in examples)
               "data": {
                 "type": "issues",
                 "id": "1"
+              }
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
               }
             }
           }
