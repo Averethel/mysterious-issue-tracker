@@ -106,7 +106,10 @@ class Api::V1::UsersController < ApplicationController
   #     }
   #   }
   def index
-    @users = filter_users(policy_scope(User)).page(page_params[:number]).per(page_params[:size])
+    @users = UserFilterService.new(filter_params)
+      .filter(policy_scope(User))
+      .page(page_params[:number])
+      .per(page_params[:size])
 
     render json: @users, meta: {
       total: @users.total_count,
@@ -382,14 +385,9 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def filter_params
-    @filter_params ||= params.permit(filters: [
+    params.permit(filters: [
       :username,
       id: []
     ])[:filters] || {}
-  end
-
-  def filter_users(users)
-    users = users.where('username ilike ?', "%#{filter_params[:username]}%") if filter_params[:username]
-    users.where(filter_params.except(:username))
   end
 end
