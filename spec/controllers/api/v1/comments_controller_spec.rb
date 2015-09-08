@@ -66,39 +66,54 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
 
   describe 'PATCH #update' do
     let!(:comment) { FactoryGirl.create(:comment) }
+    let(:valid_attributes) do
+      {
+        body: '+1'
+      }
+    end
+    let(:invalid_attributes) do
+      {
+        body: ''
+      }
+    end
 
-    context 'with valid params' do
-      let(:valid_attributes) do
-        {
-          body: '+1'
-        }
+    context 'when authorized' do
+      let(:user){ comment.creator }
+
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(FactoryGirl.create(:admin))
       end
 
-      it 'changes the Comment' do
-        expect do
+      context 'with valid params' do
+        it 'changes the Comment' do
+          expect do
+            patch :update, id: comment.id, comment: valid_attributes
+          end.to change{
+            Comment.find(comment.id).body
+          }.to('+1')
+        end
+
+        it 'assigns a newly created comment as @comment' do
           patch :update, id: comment.id, comment: valid_attributes
-        end.to change{
-          Comment.find(comment.id).body
-        }.to('+1')
+          expect(assigns(:comment)).to be_a(Comment)
+          expect(assigns(:comment)).to be_persisted
+        end
       end
 
-      it 'assigns a newly created comment as @comment' do
-        patch :update, id: comment.id, comment: valid_attributes
-        expect(assigns(:comment)).to be_a(Comment)
-        expect(assigns(:comment)).to be_persisted
+      context 'with invalid params' do
+        it 'assigns an comment as @comment' do
+          patch :update, id: comment.id, comment: invalid_attributes
+          expect(assigns(:comment)).to be_a(Comment)
+        end
       end
     end
 
-    context 'with invalid params' do
-      let(:invalid_attributes) do
-        {
-          body: ''
-        }
-      end
-
-      it 'assigns an comment as @comment' do
-        patch :update, id: comment.id, comment: invalid_attributes
-        expect(assigns(:comment)).to be_a(Comment)
+    context 'when not authorized' do
+      it 'is not found' do
+        patch :update, id: comment.id, comment: valid_attributes
+        expect(response).to be_not_found
       end
     end
   end
@@ -106,10 +121,25 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
   describe 'DELETE #destroy' do
     let!(:comment) { FactoryGirl.create(:comment) }
 
-    it 'destroys the requested comment' do
-      expect do
+    context 'when authorized' do
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(FactoryGirl.create(:admin))
+      end
+
+      it 'destroys the requested comment' do
+        expect do
+          delete :destroy, id: comment.to_param
+        end.to change(Comment, :count).by(-1)
+      end
+    end
+
+    context 'when not authorized' do
+      it 'is not found' do
         delete :destroy, id: comment.to_param
-      end.to change(Comment, :count).by(-1)
+        expect(response).to be_not_found
+      end
     end
   end
 end

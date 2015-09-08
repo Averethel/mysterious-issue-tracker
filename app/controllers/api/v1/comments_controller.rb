@@ -80,7 +80,7 @@ class Api::V1::CommentsController < ApplicationController
   #          }
   #        }
   def index
-    @comments = @issue.comments.page(params[:page][:number]).per(params[:page][:size])
+    @comments = policy_scope(@issue.comments).page(params[:page][:number]).per(params[:page][:size])
 
     render json: @comments, meta: {
       total: @issue.comments.count,
@@ -128,6 +128,7 @@ class Api::V1::CommentsController < ApplicationController
   #         }
   #       }
   def show
+    authorize @comment
     render json: @comment
   end
 
@@ -191,7 +192,8 @@ class Api::V1::CommentsController < ApplicationController
   #        ]
   #      }
   def create
-    @comment = @issue.comments.build(comment_params.merge(creator: current_user))
+    @comment = @issue.comments.build(permitted_attributes(Comment.new).merge(creator: current_user))
+    authorize @comment
 
     if @comment.save
       render json: @comment, status: :created, location: api_v1_comment_url(@comment)
@@ -257,7 +259,8 @@ class Api::V1::CommentsController < ApplicationController
   #        ]
   #      }
   def update
-    if @comment.update_attributes(comment_params)
+    authorize @comment
+    if @comment.update_attributes(permitted_attributes(@comment))
       render json: @comment
     else
       validation_errors(@comment.errors)
@@ -275,6 +278,7 @@ class Api::V1::CommentsController < ApplicationController
   #   resp.status
   #   => 204
   def destroy
+    authorize @comment
     @comment.destroy
 
     head :no_content
@@ -288,9 +292,5 @@ class Api::V1::CommentsController < ApplicationController
 
   def set_comment
     @comment = Comment.find(params[:id])
-  end
-
-  def comment_params
-    params.require(:comment).permit(:body)
   end
 end
