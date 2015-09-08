@@ -6,8 +6,15 @@ class Api::V1::IssuesController < ApplicationController
   # GET /api/v1/issues
   #
   # parameters:
-  #   page[size]: INTEGER
-  #   page[number]: INTEGER
+  #   pagination
+  #     page[size]: INTEGER
+  #     page[number]: INTEGER
+  #   filtering
+  #     filters[title]: STRING - wildcard match
+  #     filters[description]: STRING - wildcard match
+  #     filters[id]: [INTEGER] - inclusion math
+  #     filters[priority]: [STRING] - inclusion math
+  #     filters[status]: [STRING] - inclusion math
   #
   # = Example
   #
@@ -93,10 +100,13 @@ class Api::V1::IssuesController < ApplicationController
   #          }
   #       }
   def index
-    @issues = policy_scope(Issue).page(params[:page][:number]).per(params[:page][:size])
+    @issues = IssueFilterService.new(filter_params)
+      .filter(policy_scope(Issue))
+      .page(page_params[:number])
+      .per(page_params[:size])
 
     render json: @issues, meta: {
-      total: Issue.count,
+      total: @issues.total_count,
       current_page: @issues.current_page,
       on_page: @issues.size,
       total_pages: @issues.total_pages
@@ -429,5 +439,14 @@ class Api::V1::IssuesController < ApplicationController
 
   def set_issue
     @issue = Issue.find(params[:id])
+  end
+
+  def filter_params
+    params.permit(filters: [
+      :title, :description,
+      id: [],
+      priority: [],
+      status: []
+    ])[:filters] || {}
   end
 end

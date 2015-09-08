@@ -3,7 +3,6 @@ class ApplicationController < ActionController::API
   include Pundit
 
   before_action :check_authentication
-  before_action :prepare_page_params, only: [:index]
 
   after_action :verify_authorized, except: [:index]
   after_action :verify_policy_scoped, only: [:index]
@@ -15,8 +14,8 @@ class ApplicationController < ActionController::API
 
   private
 
-  def prepare_page_params
-    params[:page] ||= {}
+  def page_params
+    params.permit(page: [:size, :number])[:page] || {}
   end
 
   def not_found(error)
