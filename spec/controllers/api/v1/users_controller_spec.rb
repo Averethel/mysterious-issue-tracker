@@ -92,4 +92,14 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    let!(:user) { FactoryGirl.create(:user) }
+
+    it 'destroys the requested user' do
+      expect do
+        delete :destroy, id: user.to_param
+      end.to change(User, :count).by(-1)
+    end
+  end
 end

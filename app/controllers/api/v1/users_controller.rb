@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update]
+  before_action :set_user, only: [:show, :update, :destroy]
+
   ## Lists users
   #
   # GET /api/v1/users
@@ -195,6 +196,22 @@ class Api::V1::UsersController < ApplicationController
     else
       validation_errors(@user.errors)
     end
+  end
+
+  ## Deletes a user
+  #
+  # DELETE /api/v1/users/:id
+  #
+  # = Examples
+  #
+  #   resp = conn.delete("/api/v1/users/1")
+  #
+  #   resp.status
+  #   => 204
+  def destroy
+    @user.destroy
+
+    head :no_content
   end
 
   private

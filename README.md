@@ -190,6 +190,17 @@
      }
 ```
 
+## Delete a user
+### DELETE /api/v1/users/:id
+#### Examples
+```
+  resp = conn.delete("/api/v1/users/1")
+```
+```
+  resp.status
+  => 204
+```
+
 ## List issues
 ### GET /api/v1/issues
 #### parameters:
