@@ -4,9 +4,11 @@ RSpec.describe 'Issues', type: :request do
   describe 'PATCH /api/v1/issues/1' do
     let(:issue) { FactoryGirl.create(:issue) }
     let(:body) { JSON.parse(response.body) }
+    let!(:admin) { FactoryGirl.create(:admin, username: 'test', password: 'test') }
 
     before do
-      patch api_v1_issue_path(issue), params
+      env = { 'HTTP_AUTHORIZATION': ActionController::HttpAuthentication::Basic.encode_credentials('test', 'test') }
+      patch api_v1_issue_path(issue), params, env
     end
 
     context 'with valid params' do

@@ -21,39 +21,55 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
 
   describe 'PATCH #update' do
     let!(:issue) { FactoryGirl.create(:issue) }
+    let(:invalid_attributes) do
+      {
+        title: ''
+      }
+    end
+    let(:valid_attributes) do
+      {
+        title: 'No comments'
+      }
+    end
 
-    context 'with valid params' do
-      let(:valid_attributes) do
-        {
-          title: 'No comments'
-        }
+
+    context 'when authorized' do
+      let(:user){ issue.creator }
+
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(FactoryGirl.create(:admin))
       end
 
-      it 'changes the Issue' do
-        expect do
+      context 'with valid params' do
+        it 'changes the Issue' do
+          expect do
+            patch :update, id: issue.id, issue: valid_attributes
+          end.to change{
+            Issue.find(issue.id).title
+          }.to('No comments')
+        end
+
+        it 'assigns a requested issue as @issue' do
           patch :update, id: issue.id, issue: valid_attributes
-        end.to change{
-          Issue.find(issue.id).title
-        }.to('No comments')
+          expect(assigns(:issue)).to be_a(Issue)
+          expect(assigns(:issue)).to be_persisted
+        end
       end
 
-      it 'assigns a requested issue as @issue' do
-        patch :update, id: issue.id, issue: valid_attributes
-        expect(assigns(:issue)).to be_a(Issue)
-        expect(assigns(:issue)).to be_persisted
+      context 'with invalid params' do
+        it 'assigns an issue as @issue' do
+          patch :update, id: issue.id, issue: invalid_attributes
+          expect(assigns(:issue)).to be_a(Issue)
+        end
       end
     end
 
-    context 'with invalid params' do
-      let(:invalid_attributes) do
-        {
-          title: ''
-        }
-      end
-
-      it 'assigns an issue as @issue' do
-        patch :update, id: issue.id, issue: invalid_attributes
-        expect(assigns(:issue)).to be_a(Issue)
+    context 'when not authorized' do
+      it 'is not found' do
+        put :update, id: issue.id, issue: valid_attributes
+        expect(response).to be_not_found
       end
     end
   end
@@ -107,10 +123,25 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
   describe 'DELETE #destroy' do
     let!(:issue) { FactoryGirl.create(:issue) }
 
-    it 'destroys the requested issue' do
-      expect do
+    context 'when authorized' do
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(FactoryGirl.create(:admin))
+      end
+
+      it 'destroys the requested issue' do
+        expect do
+          delete :destroy, id: issue.to_param
+        end.to change(Issue, :count).by(-1)
+      end
+    end
+
+    context 'when not authorized' do
+      it 'is not found' do
         delete :destroy, id: issue.to_param
-      end.to change(Issue, :count).by(-1)
+        expect(response).to be_not_found
+      end
     end
   end
 end

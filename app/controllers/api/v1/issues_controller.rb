@@ -84,7 +84,7 @@ class Api::V1::IssuesController < ApplicationController
   #          }
   #       }
   def index
-    @issues = Issue.page(params[:page][:number]).per(params[:page][:size])
+    @issues = policy_scope(Issue).page(params[:page][:number]).per(params[:page][:size])
 
     render json: @issues, meta: {
       total: Issue.count,
@@ -132,6 +132,7 @@ class Api::V1::IssuesController < ApplicationController
   #         }
   #       }
   def show
+    authorize @issue
     render json: @issue
   end
 
@@ -202,13 +203,15 @@ class Api::V1::IssuesController < ApplicationController
   #        ]
   #      }
   def create
-    @issue = current_user.issues.build(issue_params)
+    @issue = current_user.issues.build(permitted_attributes(Issue.new))
+    authorize @issue
     if @issue.save
       render json: @issue, status: :created, location: api_v1_issue_url(@issue)
     else
       validation_errors(@issue.errors)
     end
   rescue ArgumentError => e
+    skip_authorization
     invalid_params(e)
   end
 
@@ -272,7 +275,8 @@ class Api::V1::IssuesController < ApplicationController
   #        ]
   #      }
   def update
-    if @issue.update_attributes(issue_params)
+    authorize @issue
+    if @issue.update_attributes(permitted_attributes(@issue))
       render json: @issue
     else
       validation_errors(@issue.errors)
@@ -292,6 +296,7 @@ class Api::V1::IssuesController < ApplicationController
   #   resp.status
   #   => 204
   def destroy
+    authorize @issue
     @issue.destroy
 
     head :no_content
@@ -301,9 +306,5 @@ class Api::V1::IssuesController < ApplicationController
 
   def set_issue
     @issue = Issue.find(params[:id])
-  end
-
-  def issue_params
-    params.require(:issue).permit(:title, :description, :priority, :status)
   end
 end
