@@ -37,6 +37,14 @@ class Api::V1::UsersController < ApplicationController
   #               }
   #             ]
   #           },
+  #           "assigned_issues": {
+  #             "data": [
+  #               {
+  #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           },
   #          "comments": {
   #             "data": []
   #           }
@@ -57,6 +65,14 @@ class Api::V1::UsersController < ApplicationController
   #             "data": [
   #               {
   #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           },
+  #           "assigned_issues": {
+  #             "data": [
+  #               {
+  #                 "id": "2",
   #                 "type": "issues"
   #               }
   #             ]
@@ -127,6 +143,14 @@ class Api::V1::UsersController < ApplicationController
   #               }
   #             ]
   #           },
+  #           "assigned_issues": {
+  #             "data": [
+  #               {
+  #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           },
   #           "comments": {
   #             "data": []
   #           }
@@ -162,6 +186,14 @@ class Api::V1::UsersController < ApplicationController
   #         },
   #         "relationships": {
   #           "issues": {
+  #             "data": [
+  #               {
+  #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           },
+  #           "assigned_issues": {
   #             "data": [
   #               {
   #                 "id": "1",
@@ -211,6 +243,9 @@ class Api::V1::UsersController < ApplicationController
   #         },
   #         "relationships": {
   #           "issues": {
+  #             "data": []
+  #           },
+  #           "assigned_issues": {
   #             "data": []
   #           },
   #           "comments": {
@@ -274,6 +309,14 @@ class Api::V1::UsersController < ApplicationController
   #         },
   #         "relationships": {
   #           "issues": {
+  #             "data": [
+  #               {
+  #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           },
+  #           "assigned_issues": {
   #             "data": [
   #               {
   #                 "id": "1",

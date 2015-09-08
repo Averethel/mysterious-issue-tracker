@@ -6,6 +6,7 @@ RSpec.describe Issue do
 
   it { is_expected.to have_many(:comments) }
   it { is_expected.to belong_to(:creator) }
+  it { is_expected.to belong_to(:assignee) }
 
   it { is_expected.to define_enum_for(:status) }
   it { is_expected.to define_enum_for(:priority) }

@@ -97,6 +97,14 @@ Role base system with following permissions
               }
             ]
           },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "1",
+                "type": "issues"
+              }
+            ]
+          },
           "comments": {
             "data": []
           }
@@ -118,6 +126,14 @@ Role base system with following permissions
             "data": [
               {
                 "id": "1",
+                "type": "issues"
+              }
+            ]
+          },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "2",
                 "type": "issues"
               }
             ]
@@ -181,6 +197,14 @@ Role base system with following permissions
               }
             ]
           },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "1",
+                "type": "issues"
+              }
+            ]
+          },
           "comments": {
             "data": []
           }
@@ -219,6 +243,14 @@ Role base system with following permissions
             "data": [
               {
                 "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "1",
                 "type": "issues"
               }
             ]
@@ -265,6 +297,9 @@ Role base system with following permissions
         },
         "relationships": {
           "issues": {
+            "data": []
+          },
+          "assigned_issues": {
             "data": []
           },
           "comments": {
@@ -331,6 +366,14 @@ Role base system with following permissions
             "data": [
               {
                 "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "1",
                 "type": "issues"
               }
             ]

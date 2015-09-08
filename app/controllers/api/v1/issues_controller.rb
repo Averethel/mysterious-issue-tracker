@@ -39,6 +39,12 @@ class Api::V1::IssuesController < ApplicationController
   #                   "id": "2",
   #                   "type": "users"
   #                 }
+  #               },
+  #               "assignee": {
+  #                 "data": {
+  #                   "id": "1",
+  #                   "type": "users"
+  #                 }
   #               }
   #             }
   #           },
@@ -67,6 +73,9 @@ class Api::V1::IssuesController < ApplicationController
   #                   "id": "1",
   #                   "type": "users"
   #                 }
+  #               },
+  #               "assignee": {
+  #                 "data": null
   #               }
   #             }
   #           }
@@ -127,6 +136,12 @@ class Api::V1::IssuesController < ApplicationController
   #                 "id": "2",
   #                 "type": "users"
   #               }
+  #             },
+  #             "assignee": {
+  #               "data": {
+  #                 "id": "1",
+  #                 "type": "users"
+  #               }
   #             }
   #           }
   #         }
@@ -177,6 +192,9 @@ class Api::V1::IssuesController < ApplicationController
   #                 "id": "2",
   #                 "type": "users"
   #               }
+  #             },
+  #             "assignee": {
+  #               "data": null
   #             }
   #           }
   #         }
@@ -252,6 +270,12 @@ class Api::V1::IssuesController < ApplicationController
   #            "creator": {
   #               "data": {
   #                 "id": "2",
+  #                 "type": "users"
+  #               }
+  #             },
+  #             "assignee": {
+  #               "data": {
+  #                 "id": "1",
   #                 "type": "users"
   #               }
   #             }
