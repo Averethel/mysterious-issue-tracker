@@ -7,7 +7,7 @@ RSpec.describe 'Comments', type: :request do
     let(:body) { JSON.parse(response.body) }
 
     before do
-      get api_v1_issue_comments_path(issue, page: {size: 1})
+      get api_v1_issue_comments_path(issue, page: { size: 1 })
     end
 
     context 'metadata' do
@@ -33,25 +33,18 @@ RSpec.describe 'Comments', type: :request do
       let(:links) { body['links'] }
 
       it 'includes link to self' do
-        expect(links['self']).
-          to eq(api_v1_issue_comments_url(issue, {
-            page: {size: 1, number: 1}
-          }))
+        expect(links['self'])
+          .to eq(api_v1_issue_comments_url(issue,             page: { size: 1, number: 1 }))
       end
 
       it 'includes link to next' do
-        expect(links['next']).
-          to eq(api_v1_issue_comments_url(issue, {
-            page: {size: 1, number: 2}
-          }))
+        expect(links['next'])
+          .to eq(api_v1_issue_comments_url(issue,             page: { size: 1, number: 2 }))
       end
 
-
       it 'includes link to last' do
-        expect(links['last']).
-          to eq(api_v1_issue_comments_url(issue, {
-            page: {size: 1, number: 2}
-          }))
+        expect(links['last'])
+          .to eq(api_v1_issue_comments_url(issue,             page: { size: 1, number: 2 }))
       end
     end
 

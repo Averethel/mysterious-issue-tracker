@@ -29,9 +29,9 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'creates a new User' do
-        expect {
+        expect do
           post :create, user: valid_attributes
-        }.to change(User, :count).by(1)
+        end.to change(User, :count).by(1)
       end
 
       it 'assigns a newly created user as @user' do
@@ -44,7 +44,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'with invalid params' do
       let(:invalid_attributes) do
         {
-          username: '',
+          username: ''
         }
       end
 

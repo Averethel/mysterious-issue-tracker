@@ -8,7 +8,7 @@ class AuthenticationService
 
   def authenticate!
     user = User.find_by(username: @username)
-    raise AuthenticationError if user.nil?
-    user.authenticate(@password) || raise(AuthenticationError)
+    fail AuthenticationError if user.nil?
+    user.authenticate(@password) || fail(AuthenticationError)
   end
 end

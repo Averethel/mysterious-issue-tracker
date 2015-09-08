@@ -78,21 +78,21 @@ RSpec.describe 'Users', type: :request do
 
         context 'missing password_confirmation' do
           context 'password_confirmation mismatch' do
-          let(:params) { { user: { username: 'test', password: 'foo' } } }
-          let(:errors) { body['errors'] }
+            let(:params) { { user: { username: 'test', password: 'foo' } } }
+            let(:errors) { body['errors'] }
 
-          it 'is unprocessable entity' do
-            expect(response.status).to eq(422)
-          end
+            it 'is unprocessable entity' do
+              expect(response.status).to eq(422)
+            end
 
-          it 'resurns errors' do
-            errors.each do |error|
-              expect(error['status']).to eq('422')
-              expect(['Invalid password_confirmation']).to include(error['title'])
-              expect(['can\'t be blank']).to include(error['detail'])
+            it 'resurns errors' do
+              errors.each do |error|
+                expect(error['status']).to eq('422')
+                expect(['Invalid password_confirmation']).to include(error['title'])
+                expect(['can\'t be blank']).to include(error['detail'])
+              end
             end
           end
-        end
         end
       end
     end

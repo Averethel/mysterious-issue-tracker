@@ -8,7 +8,7 @@ RSpec.describe Api::V1::UsersController, type: :routing do
     end
 
     it 'routes to #show' do
-      expect(:get => '/api/v1/users/1')
+      expect(get: '/api/v1/users/1')
         .to route_to('api/v1/users#show', id: '1', format: :json)
     end
 

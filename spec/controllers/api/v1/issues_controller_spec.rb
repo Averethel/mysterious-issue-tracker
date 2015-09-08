@@ -59,7 +59,7 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:user){ FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.create(:user) }
 
     before do
       allow_any_instance_of(ApplicationController)

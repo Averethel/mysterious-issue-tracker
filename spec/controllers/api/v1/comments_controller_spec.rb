@@ -22,7 +22,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
 
   describe 'POST #create' do
     let!(:issue) { FactoryGirl.create(:issue) }
-    let(:user){ FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.create(:user) }
 
     before do
       allow_any_instance_of(ApplicationController)

@@ -49,8 +49,8 @@ class ApplicationController < ActionController::API
       errors: [
         {
           status: '401',
-          title: "HTTP Basic: Access denied",
-          detail: "Invalid username or password"
+          title: 'HTTP Basic: Access denied',
+          detail: 'Invalid username or password'
         }
       ]
     }, status: :unauthorized
