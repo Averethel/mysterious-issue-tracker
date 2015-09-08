@@ -7,6 +7,10 @@ class IssuePolicy < ApplicationPolicy
     !user.guest?
   end
 
+  def free?
+    admin_or_creator? || assignee?
+  end
+
   def update?
     admin_or_creator?
   end
@@ -23,6 +27,10 @@ class IssuePolicy < ApplicationPolicy
 
   def admin_or_creator?
     user.admin? || user.id == record.creator_id
+  end
+
+  def assignee?
+    user.id == record.assignee_id
   end
 
   def base_attributes

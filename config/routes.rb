@@ -11,6 +11,8 @@ Rails.application.routes.draw do
         member do
           patch :take
           put :take
+          patch :free
+          put :free
         end
 
         resources :comments, only: [:index, :create]

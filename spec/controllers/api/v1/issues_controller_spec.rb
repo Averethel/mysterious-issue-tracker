@@ -53,6 +53,39 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
     end
   end
 
+  describe 'PATCH #free' do
+    let!(:issue) { FactoryGirl.create(:issue, assignee: assignee) }
+    let(:assignee) { FactoryGirl.create(:user) }
+
+    context 'when authorized' do
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(assignee)
+      end
+
+      it 'assigns the requested issue as @issue' do
+        patch :free, id: issue.to_param
+        expect(assigns(:issue)).to eq(issue)
+      end
+
+      it 'assigns current_user to issue' do
+        expect do
+          patch :free, id: issue.to_param
+        end.to change{
+          issue.reload.assignee
+        }.to(nil)
+      end
+    end
+
+    context 'when not authorized' do
+      it 'is not found' do
+        patch :free, id: issue.to_param
+        expect(response).to be_not_found
+      end
+    end
+  end
+
   describe 'PATCH #update' do
     let!(:issue) { FactoryGirl.create(:issue) }
     let(:invalid_attributes) do

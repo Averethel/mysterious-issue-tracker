@@ -22,6 +22,16 @@ RSpec.describe Api::V1::IssuesController, type: :routing do
         .to route_to('api/v1/issues#take', id: '1', format: :json)
     end
 
+    it 'routes to #free' do
+      expect(patch: '/api/v1/issues/1/free')
+        .to route_to('api/v1/issues#free', id: '1', format: :json)
+    end
+
+    it 'routes to #free via PUT' do
+      expect(put: '/api/v1/issues/1/free')
+        .to route_to('api/v1/issues#free', id: '1', format: :json)
+    end
+
     it 'routes to #create' do
       expect(post: '/api/v1/issues')
         .to route_to('api/v1/issues#create', format: :json)
