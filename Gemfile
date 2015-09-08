@@ -9,6 +9,8 @@ gem 'unicorn'
 
 gem 'kaminari'
 
+gem 'bcrypt'
+
 group :development do
   gem 'spring'
   gem 'thin'
