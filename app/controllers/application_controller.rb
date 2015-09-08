@@ -1,12 +1,17 @@
 class ApplicationController < ActionController::API
   include ActionController::HttpAuthentication::Basic::ControllerMethods
+  include Pundit
 
   before_action :check_authentication
   before_action :prepare_page_params, only: [:index]
 
+  after_action :verify_authorized, except: [:index]
+  after_action :verify_policy_scoped, only: [:index]
+
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from ActionController::ParameterMissing, with: :invalid_params
   rescue_from AuthenticationService::AuthenticationError, with: :authentication_error
+  rescue_from Pundit::NotAuthorizedError, with: :not_found_authorization
 
   private
 
@@ -21,6 +26,12 @@ class ApplicationController < ActionController::API
         title: 'Record not found',
         detail: error.message
       }] }, status: :not_found
+  end
+
+  def not_found_authorization(error)
+    id = error.record.id
+    message = "Couldn't find #{error.record.class} with 'id'=#{id}"
+    not_found(OpenStruct.new(message: message))
   end
 
   def invalid_params(error)

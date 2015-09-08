@@ -10,6 +10,7 @@ gem 'unicorn'
 gem 'kaminari'
 
 gem 'bcrypt'
+gem 'pundit'
 
 group :development do
   gem 'spring'

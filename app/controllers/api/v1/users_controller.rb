@@ -86,7 +86,7 @@ class Api::V1::UsersController < ApplicationController
   #     }
   #   }
   def index
-    @users = User.page(params[:page][:number]).per(params[:page][:size])
+    @users = policy_scope(User).page(params[:page][:number]).per(params[:page][:size])
 
     render json: @users, meta: {
       total: User.count,
@@ -133,6 +133,7 @@ class Api::V1::UsersController < ApplicationController
   #         }
   #       }
   def show
+    authorize @user
     render json: @user
   end
 
@@ -146,6 +147,7 @@ class Api::V1::UsersController < ApplicationController
   #   user[password_confirmation]: STRING, required
   #   user[name]: STRING
   #   user[surname]: STRING
+  #   user[role]: STRING, [user, admin], as admin only
   #
   # = Examples
   #
@@ -189,7 +191,8 @@ class Api::V1::UsersController < ApplicationController
   #         ]
   #       }
   def create
-    @user = User.new(user_params)
+    @user = User.new(permitted_attributes(User.new))
+    authorize @user
 
     if @user.save
       render json: @user, status: :created, location: api_v1_user_url(@user)
@@ -207,6 +210,7 @@ class Api::V1::UsersController < ApplicationController
   #   user[password_confirmation]: STRING, required if password changed
   #   user[name]: STRING
   #   user[surname]: STRING
+  #   user[role]: STRING, [user, admin], as admin only
   #
   # = Examples
   #
@@ -257,7 +261,8 @@ class Api::V1::UsersController < ApplicationController
   #        ]
   #      }
   def update
-    if @user.update(user_params)
+    authorize @user
+    if @user.update(permitted_attributes(@user))
       render json: @user
     else
       validation_errors(@user.errors)
@@ -275,6 +280,7 @@ class Api::V1::UsersController < ApplicationController
   #   resp.status
   #   => 204
   def destroy
+    authorize @user
     @user.destroy
 
     head :no_content
@@ -284,9 +290,5 @@ class Api::V1::UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
-  end
-
-  def user_params
-    params.require(:user).permit(:username, :name, :surname, :password, :password_confirmation)
   end
 end

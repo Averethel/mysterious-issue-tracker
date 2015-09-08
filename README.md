@@ -3,6 +3,57 @@
 ## Authentication method
 HTTP Basic Auth (ommited in examples)
 
+## Authorization
+Role base system with following permissions
+### guest
+#### Issues
+  * read
+
+#### Comments
+  * read
+
+#### Users
+  * read
+  * create
+
+### user
+#### Issues
+  * read
+  * create
+  * edit (if user is creator)
+  * destroy (if user is creator)
+
+#### Comments
+  * read
+  * create
+  * edit (if user is creator)
+  * destroy (if user is creator)
+
+#### Users
+  * read
+  * create
+  * edit (self)
+  * destroy (self)
+
+### admin
+#### Issues
+  * read
+  * create
+  * edit
+  * destroy
+
+#### Comments
+  * read
+  * create
+  * edit
+  * destroy
+
+#### Users
+  * read
+  * create
+  * edit
+  * destroy
+
 ## List all users
 ### GET /api/v1/users
 #### parameters:
@@ -30,6 +81,7 @@ HTTP Basic Auth (ommited in examples)
           "username": "test",
           "name": "Test",
           "surname": "Testy",
+          "role": "user",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
         },
@@ -54,6 +106,7 @@ HTTP Basic Auth (ommited in examples)
           "username": "averethel",
           "name": null,
           "surname": null,
+          "role": "user",
           "created_at": "2015-09-08T09:05:18.438Z",
           "updated_at": "2015-09-08T09:05:18.438Z"
         },
@@ -112,6 +165,7 @@ HTTP Basic Auth (ommited in examples)
           "username": "test",
           "name": "Test",
           "surname": "Testy",
+          "role": "user",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
         },
@@ -139,6 +193,7 @@ HTTP Basic Auth (ommited in examples)
   * `user[password_confirmation]`: STRING, required
   * `user[name]`: STRING
   * `user[surname]`: STRING
+  * `user[role]`: STRING, [user, admin], as admin only
 
 #### Examples
 ```
@@ -159,6 +214,7 @@ HTTP Basic Auth (ommited in examples)
           "username": "test",
           "name": "Test",
           "surname": "Testy",
+          "role": "user",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
         },
@@ -196,11 +252,12 @@ HTTP Basic Auth (ommited in examples)
 ## Update a user
 ### PATCH /api/v1/users/:id
 #### body parameters:
-  * `user[username]`: STRING, required
-  * `user[password]`: STRING, required
-  * `user[password_confirmation]`: STRING, required
+  * `user[username]`: STRING
+  * `user[password]`: STRING
+  * `user[password_confirmation]`: STRING
   * `user[name]`: STRING
   * `user[surname]`: STRING
+  * `user[role]`: STRING, [user, admin], as admin only
 
 #### Examples
 ```
@@ -219,6 +276,7 @@ HTTP Basic Auth (ommited in examples)
         "attributes": {
           "username": "test",
           "name": "Test",
+          "role": "user",
           "surname": "Testy",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:45:51.520Z"
