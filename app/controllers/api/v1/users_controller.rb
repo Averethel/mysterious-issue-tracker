@@ -27,6 +27,16 @@ class Api::V1::UsersController < ApplicationController
   #           "surname": "Testy",
   #           "created_at": "2015-09-08T09:04:51.520Z",
   #           "updated_at": "2015-09-08T09:04:51.520Z"
+  #         },
+  #          "relationships": {
+  #           "issues": {
+  #             "data": [
+  #               {
+  #                 "id": "2",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           }
   #         }
   #       },
   #       {
@@ -38,6 +48,16 @@ class Api::V1::UsersController < ApplicationController
   #           "surname": null,
   #           "created_at": "2015-09-08T09:05:18.438Z",
   #           "updated_at": "2015-09-08T09:05:18.438Z"
+  #         },
+  #          "relationships": {
+  #           "issues": {
+  #             "data": [
+  #               {
+  #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           }
   #         }
   #       }
   #     ],
@@ -85,6 +105,16 @@ class Api::V1::UsersController < ApplicationController
   #           "surname": "Testy",
   #           "created_at": "2015-09-08T09:04:51.520Z",
   #           "updated_at": "2015-09-08T09:04:51.520Z"
+  #         },
+  #          "relationships": {
+  #           "issues": {
+  #             "data": [
+  #               {
+  #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           }
   #         }
   #       }
   def show
@@ -119,6 +149,11 @@ class Api::V1::UsersController < ApplicationController
   #           "surname": "Testy",
   #           "created_at": "2015-09-08T09:04:51.520Z",
   #           "updated_at": "2015-09-08T09:04:51.520Z"
+  #         },
+  #          "relationships": {
+  #           "issues": {
+  #             "data": []
+  #           }
   #         }
   #       }
   #
@@ -172,6 +207,16 @@ class Api::V1::UsersController < ApplicationController
   #           "surname": "Testy",
   #           "created_at": "2015-09-08T09:04:51.520Z",
   #           "updated_at": "2015-09-08T09:45:51.520Z"
+  #         },
+  #          "relationships": {
+  #           "issues": {
+  #             "data": [
+  #               {
+  #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           }
   #         }
   #       }
   #

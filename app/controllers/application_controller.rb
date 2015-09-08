@@ -56,6 +56,10 @@ class ApplicationController < ActionController::API
     }, status: :unauthorized
   end
 
+  def current_user
+    @current_user ||= User.new
+  end
+
   def check_authentication
     authenticate_with_http_basic do |username, password|
       @current_user = AuthenticationService.new(

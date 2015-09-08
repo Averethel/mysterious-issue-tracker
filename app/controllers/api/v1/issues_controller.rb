@@ -33,6 +33,12 @@ class Api::V1::IssuesController < ApplicationController
   #             "relationships": {
   #               "comments": {
   #                 "data": []
+  #               },
+  #               "creator": {
+  #                 "data": {
+  #                   "id": "2",
+  #                   "type": "users"
+  #                 }
   #               }
   #             }
   #           },
@@ -55,6 +61,12 @@ class Api::V1::IssuesController < ApplicationController
   #                     "id": "1"
   #                   }
   #                 ]
+  #               },
+  #               "creator": {
+  #                 "data": {
+  #                   "id": "1",
+  #                   "type": "users"
+  #                 }
   #               }
   #             }
   #           }
@@ -109,6 +121,12 @@ class Api::V1::IssuesController < ApplicationController
   #           "relationships": {
   #             "comments": {
   #               "data": []
+  #             },
+  #            "creator": {
+  #               "data": {
+  #                 "id": "2",
+  #                 "type": "users"
+  #               }
   #             }
   #           }
   #         }
@@ -120,6 +138,9 @@ class Api::V1::IssuesController < ApplicationController
   ## Creates an issue
   #
   # POST /api/v1/issues
+  #
+  # restrictions
+  #   must be authenticated
   #
   # body parameters:
   #   issue[tite]: STRING, required
@@ -149,6 +170,12 @@ class Api::V1::IssuesController < ApplicationController
   #           "relationships": {
   #             "comments": {
   #               "data": []
+  #             },
+  #            "creator": {
+  #               "data": {
+  #                 "id": "2",
+  #                 "type": "users"
+  #               }
   #             }
   #           }
   #         }
@@ -175,7 +202,7 @@ class Api::V1::IssuesController < ApplicationController
   #        ]
   #      }
   def create
-    @issue = Issue.new(issue_params)
+    @issue = current_user.issues.build(issue_params)
     if @issue.save
       render json: @issue, status: :created, location: api_v1_issue_url(@issue)
     else
@@ -218,6 +245,12 @@ class Api::V1::IssuesController < ApplicationController
   #           "relationships": {
   #             "comments": {
   #               "data": []
+  #             },
+  #            "creator": {
+  #               "data": {
+  #                 "id": "2",
+  #                 "type": "users"
+  #               }
   #             }
   #           }
   #         }

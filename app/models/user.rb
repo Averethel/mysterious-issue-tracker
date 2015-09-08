@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   validates :username, presence: true, uniqueness: true
   validates :password_confirmation, presence: true, if: :changed_password?
 
+  has_many :issues, foreign_key: :creator_id
+
   private
 
   def changed_password?

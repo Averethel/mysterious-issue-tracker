@@ -2,10 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'Issues', type: :request do
   describe 'POST /api/v1/issues' do
+    let!(:user) { FactoryGirl.create(:user, username: 'test', password: 'test') }
     let(:body) { JSON.parse(response.body) }
 
     before do
-      post api_v1_issues_path, params
+      env = { 'HTTP_AUTHORIZATION': ActionController::HttpAuthentication::Basic.encode_credentials('test', 'test') }
+      post api_v1_issues_path, params, env
     end
 
     context 'with valid params' do

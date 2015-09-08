@@ -1,5 +1,8 @@
 # Mysterious Issue Tracker API
 
+## Authentication method
+HTTP Basic Auth (ommited in examples)
+
 ## List all users
 ### GET /api/v1/users
 #### parameters:
@@ -29,6 +32,16 @@
           "surname": "Testy",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "2",
+                "type": "issues"
+              }
+            ]
+          }
         }
       },
       {
@@ -40,6 +53,16 @@
           "surname": null,
           "created_at": "2015-09-08T09:05:18.438Z",
           "updated_at": "2015-09-08T09:05:18.438Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "1",
+                "type": "issues"
+              }
+            ]
+          }
         }
       }
     ],
@@ -80,6 +103,16 @@
           "surname": "Testy",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "2",
+                "type": "issues"
+              }
+            ]
+          }
         }
       }
 ```
@@ -114,6 +147,11 @@
           "surname": "Testy",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": []
+          }
         }
       }
 ```
@@ -167,6 +205,16 @@
           "surname": "Testy",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:45:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "2",
+                "type": "issues"
+              }
+            ]
+          }
         }
       }
 ```
@@ -240,6 +288,12 @@
                     "id": "1"
                   }
                 ]
+              },
+              "creator": {
+                "data": {
+                  "id": "1",
+                  "type": "users"
+                }
               }
             }
           },
@@ -257,6 +311,12 @@
             "relationships": {
               "comments": {
                 "data": []
+              },
+              "creator": {
+                "data": {
+                  "id": "2",
+                  "type": "users"
+                }
               }
             }
           }
@@ -304,6 +364,12 @@
           "relationships": {
             "comments": {
               "data": []
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
             }
           }
         }
@@ -312,6 +378,8 @@
 
 ## Create an issue
 ### POST /api/v1/issues
+#### restrictions
+  must be authenticated
 #### body parameters:
   * `issue[tite]`: STRING, required
   * `issue[description]`: STRING, required
@@ -344,6 +412,12 @@
           "relationships": {
             "comments": {
               "data": []
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
             }
           }
         }
@@ -408,6 +482,12 @@
           "relationships": {
             "comments": {
               "data": []
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
             }
           }
         }

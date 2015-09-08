@@ -1,5 +1,6 @@
 class Issue < ActiveRecord::Base
   has_many :comments
+  belongs_to :creator, class_name: User
 
   enum priority: [:minor, :major, :critical, :blocker]
   enum status: [:open, :in_progress, :fixed, :rejected]
