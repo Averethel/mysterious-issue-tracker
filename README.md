@@ -21,21 +21,31 @@ Role base system with following permissions
 #### Issue
   * read
   * create
-  * edit (if user is creator)
-  * destroy (if user is creator)
+  * take
+  * free
+    * only if assignee
+  * edit
+    * status if assignee
+    * full if creator
+  * destroy
+    * only if creator
 
 #### Comments
   * read
   * create
-  * edit (if user is creator)
-  * destroy (if user is creator)
+  * edit
+    * only if creator
+  * destroy
+    * only if creator
 
 #### Users
   * me
   * read
   * create
-  * edit (self)
-  * destroy (self)
+  * edit
+    * only self
+  * destroy
+    * only self
 
 ### admin
 #### Issues
