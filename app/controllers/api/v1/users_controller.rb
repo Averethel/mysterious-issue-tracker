@@ -105,7 +105,7 @@ class Api::V1::UsersController < ApplicationController
     @users = policy_scope(User).page(params[:page][:number]).per(params[:page][:size])
 
     render json: @users, meta: {
-      total: User.count,
+      total: @users.total_count,
       current_page: @users.current_page,
       on_page: @users.size,
       total_pages: @users.total_pages

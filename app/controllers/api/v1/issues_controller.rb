@@ -96,7 +96,7 @@ class Api::V1::IssuesController < ApplicationController
     @issues = policy_scope(Issue).page(params[:page][:number]).per(params[:page][:size])
 
     render json: @issues, meta: {
-      total: Issue.count,
+      total: @issues.total_count,
       current_page: @issues.current_page,
       on_page: @issues.size,
       total_pages: @issues.total_pages
