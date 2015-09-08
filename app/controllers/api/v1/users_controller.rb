@@ -96,6 +96,48 @@ class Api::V1::UsersController < ApplicationController
     }
   end
 
+  ## Gets current user
+  #
+  # GET /api/v1/users/me
+  #
+  # = Example
+  #
+  #   resp = conn.get("/api/v1/users/me")
+  #
+  #   resp.status
+  #   => 200
+  #
+  #   resp.body
+  #   =>  {
+  #         "id": "1",
+  #         "type": "users",
+  #         "attributes": {
+  #           "username": "test",
+  #           "name": "Test",
+  #           "surname": "Testy",
+  #           "created_at": "2015-09-08T09:04:51.520Z",
+  #           "updated_at": "2015-09-08T09:04:51.520Z"
+  #         },
+  #         "relationships": {
+  #           "issues": {
+  #             "data": [
+  #               {
+  #                 "id": "1",
+  #                 "type": "issues"
+  #               }
+  #             ]
+  #           },
+  #           "comments": {
+  #             "data": []
+  #           }
+  #         }
+  #       }
+  def me
+    @user = current_user
+    authorize @user
+    render json: @user
+  end
+
   ## Gets single user
   #
   # GET /api/v1/users/:id

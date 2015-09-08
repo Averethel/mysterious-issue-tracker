@@ -18,6 +18,21 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     end
   end
 
+  describe 'GET #me' do
+    let!(:user) { FactoryGirl.create(:user) }
+
+    before do
+      allow_any_instance_of(ApplicationController)
+        .to receive(:current_user)
+        .and_return(user)
+    end
+
+    it 'assigns the current_user as @user' do
+      get :me
+      expect(assigns(:user)).to eq(user)
+    end
+  end
+
   describe 'POST #create' do
     context 'with valid params' do
       let(:valid_attributes) do

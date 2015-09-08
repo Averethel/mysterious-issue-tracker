@@ -13,11 +13,12 @@ Role base system with following permissions
   * read
 
 #### Users
+  * me
   * read
   * create
 
 ### user
-#### Issues
+#### Issue
   * read
   * create
   * edit (if user is creator)
@@ -30,6 +31,7 @@ Role base system with following permissions
   * destroy (if user is creator)
 
 #### Users
+  * me
   * read
   * create
   * edit (self)
@@ -49,6 +51,7 @@ Role base system with following permissions
   * destroy
 
 #### Users
+  * me
   * read
   * create
   * edit
@@ -143,6 +146,48 @@ Role base system with following permissions
     }
   }
 ```
+
+## Get current user
+### GET /api/v1/users/me
+#### Example
+```
+  resp = conn.get("/api/v1/users/me")
+```
+
+```
+  resp.status
+  => 200
+```
+
+```
+  resp.body
+  =>  {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "role": "user",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:04:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "comments": {
+            "data": []
+          }
+        }
+      }
+```
+
 
 ## Get single user
 ### GET /api/v1/users/:id

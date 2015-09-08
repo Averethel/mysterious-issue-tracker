@@ -3,6 +3,10 @@ class UserPolicy < ApplicationPolicy
     true
   end
 
+  def me?
+    true
+  end
+
   def update?
     admin_or_self?
   end
