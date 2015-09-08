@@ -70,8 +70,12 @@ Role base system with following permissions
 ## List all users
 ### GET /api/v1/users
 #### parameters:
-  * `page[size]`: INTEGER
-  * `page[number]`: INTEGER
+  * pagination
+    * `page[size]`: INTEGER
+    * `page[number]`: INTEGER
+  * filtering
+    * `filters[username]`: STRING - wildcard match
+    * `filters[id]`: [INTEGER] - inclusion math
 
 #### Example
 ```
@@ -428,9 +432,15 @@ Role base system with following permissions
 ## List issues
 ### GET /api/v1/issues
 #### parameters:
-  * `page[size]`: INTEGER
-  * `page[number]`: INTEGER
-
+  * pagination
+    * `page[size]`: INTEGER
+    * `page[number]`: INTEGER
+  * filtering
+    * `filters[title]`: STRING - wildcard match
+    * `filters[description]`: STRING - wildcard match
+    * `filters[id]`: [INTEGER] - inclusion math
+    * `filters[priority]`: [STRING] - inclusion math
+    * `filters[status]`: [STRING] - inclusion math
 #### Example
 ```
   resp = conn.get("/api/v1/issues")

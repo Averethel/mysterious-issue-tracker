@@ -2,11 +2,54 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::IssuesController, type: :controller do
   describe 'GET #index' do
-    let!(:issue) { FactoryGirl.create(:issue) }
+    let!(:issue) { FactoryGirl.create(:issue, priority: 'major') }
 
     it 'assigns all issues as @issues' do
       get :index
       expect(assigns(:issues)).to eq([issue])
+    end
+
+    context 'filtering' do
+      let!(:other_issue) { FactoryGirl.create(:issue, title: 'different', description: 'different', priority: 'minor') }
+
+      context 'by id' do
+        it 'includes only issues with matching id' do
+          get :index, filters: { id: [issue.id] }
+          expect(assigns(:issues)).to eq([issue])
+        end
+      end
+
+      context 'by title' do
+        it 'includes only issues with matching title' do
+          get :index, filters: { title: issue.title }
+          expect(assigns(:issues)).to eq([issue])
+        end
+      end
+
+      context 'by description' do
+        it 'includes only issues with matching description' do
+          get :index, filters: { description: issue.description }
+          expect(assigns(:issues)).to eq([issue])
+        end
+      end
+
+      context 'by priority' do
+        it 'includes only issues with matching priority' do
+          get :index, filters: { priority: [issue.priority] }
+          expect(assigns(:issues)).to eq([issue])
+        end
+      end
+
+      context 'by status' do
+        before do
+          issue.fixed!
+        end
+
+        it 'includes only issues with matching status' do
+          get :index, filters: { status: ['fixed'] }
+          expect(assigns(:issues)).to eq([issue])
+        end
+      end
     end
   end
 

@@ -80,7 +80,7 @@ class Api::V1::CommentsController < ApplicationController
   #          }
   #        }
   def index
-    @comments = policy_scope(@issue.comments).page(params[:page][:number]).per(params[:page][:size])
+    @comments = policy_scope(@issue.comments).page(page_params[:number]).per(page_params[:size])
 
     render json: @comments, meta: {
       total: @comments.total_count,

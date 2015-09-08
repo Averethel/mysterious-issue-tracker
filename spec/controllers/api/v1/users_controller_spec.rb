@@ -7,6 +7,24 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       get :index
       expect(assigns(:users)).to eq([user])
     end
+
+    context 'filtering' do
+      let!(:other_user) { FactoryGirl.create(:user, username: 'different') }
+
+      context 'by id' do
+        it 'includes only users with matching id' do
+          get :index, filters: { id: [user.id] }
+          expect(assigns(:users)).to eq([user])
+        end
+      end
+
+      context 'by username' do
+        it 'includes only users with matching id' do
+          get :index, filters: { username: user.username }
+          expect(assigns(:users)).to eq([user])
+        end
+      end
+    end
   end
 
   describe 'GET #show' do

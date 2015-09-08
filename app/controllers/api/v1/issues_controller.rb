@@ -6,8 +6,15 @@ class Api::V1::IssuesController < ApplicationController
   # GET /api/v1/issues
   #
   # parameters:
-  #   page[size]: INTEGER
-  #   page[number]: INTEGER
+  #   pagination
+  #     page[size]: INTEGER
+  #     page[number]: INTEGER
+  #   filtering
+  #     filters[title]: STRING - wildcard match
+  #     filters[description]: STRING - wildcard match
+  #     filters[id]: [INTEGER] - inclusion math
+  #     filters[priority]: [STRING] - inclusion math
+  #     filters[status]: [STRING] - inclusion math
   #
   # = Example
   #
@@ -93,7 +100,7 @@ class Api::V1::IssuesController < ApplicationController
   #          }
   #       }
   def index
-    @issues = policy_scope(Issue).page(params[:page][:number]).per(params[:page][:size])
+    @issues = filter_issues(policy_scope(Issue)).page(page_params[:number]).per(page_params[:size])
 
     render json: @issues, meta: {
       total: @issues.total_count,
@@ -429,5 +436,32 @@ class Api::V1::IssuesController < ApplicationController
 
   def set_issue
     @issue = Issue.find(params[:id])
+  end
+
+  def filter_params
+    @filter_params ||= params.permit(filters: [
+      :title, :description,
+      id: [],
+      priority: [],
+      status: []
+    ])[:filters] || {}
+  end
+
+  def filter_by_priority(issues)
+    values = filter_params[:priority].map{ |s| Issue.priorities[s] }.compact
+    issues.where(priority: values)
+  end
+
+  def filter_by_status(issues)
+    values = filter_params[:status].map{ |s| Issue.statuses[s] }.compact
+    issues.where(status: values)
+  end
+
+  def filter_issues(issues)
+    issues = issues.where('title ilike ?', "%#{filter_params[:title]}%") if filter_params[:title]
+    issues = issues.where('description ilike ?', "%#{filter_params[:description]}%") if filter_params[:description]
+    issues = filter_by_priority(issues) if filter_params[:priority]
+    issues = filter_by_status(issues) if filter_params[:status]
+    issues.where(filter_params.except(:tite, :description, :priority, :status))
   end
 end

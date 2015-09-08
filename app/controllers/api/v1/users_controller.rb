@@ -5,8 +5,12 @@ class Api::V1::UsersController < ApplicationController
   #
   # GET /api/v1/users
   # parameters:
-  #   page[size]: INTEGER
-  #   page[number]: INTEGER
+  #   pagination
+  #     page[size]: INTEGER
+  #     page[number]: INTEGER
+  #   filtering
+  #     filters[username]: STRING - wildcard match
+  #     filters[id]: [INTEGER] - inclusion math
   #
   # = Example
   #
@@ -102,7 +106,7 @@ class Api::V1::UsersController < ApplicationController
   #     }
   #   }
   def index
-    @users = policy_scope(User).page(params[:page][:number]).per(params[:page][:size])
+    @users = filter_users(policy_scope(User)).page(page_params[:number]).per(page_params[:size])
 
     render json: @users, meta: {
       total: @users.total_count,
@@ -375,5 +379,17 @@ class Api::V1::UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+  end
+
+  def filter_params
+    @filter_params ||= params.permit(filters: [
+      :username,
+      id: []
+    ])[:filters] || {}
+  end
+
+  def filter_users(users)
+    users = users.where('username ilike ?', "%#{filter_params[:username]}%") if filter_params[:username]
+    users.where(filter_params.except(:username))
   end
 end
