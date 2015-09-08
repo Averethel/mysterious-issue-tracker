@@ -550,6 +550,7 @@ Role base system with following permissions
   * `issue[tite]`: STRING, required
   * `issue[description]`: STRING, required
   * `issue[priority]`: STRING, required, [minor, major, critical, blocker]
+  * `issue[assignee_id]`: INTEGER - user id
 
 #### Examples
 ```
@@ -622,6 +623,7 @@ Role base system with following permissions
   * `issue[description]`: STRING
   * `issue[priority]`: STRING, [minor, major, critical, blocker]
   * `issue[status]`: STRING, [open, in_progress, fixed, rejected]
+  * `issue[assignee_id]`: INTEGER - user id
 
 #### Examples
 ```

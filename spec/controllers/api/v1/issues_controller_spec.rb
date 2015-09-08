@@ -28,10 +28,10 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
     end
     let(:valid_attributes) do
       {
-        title: 'No comments'
+        title: 'No comments',
+        assignee_id: issue.creator.id
       }
     end
-
 
     context 'when authorized' do
       let(:user){ issue.creator }
@@ -49,6 +49,14 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
           end.to change{
             Issue.find(issue.id).title
           }.to('No comments')
+        end
+
+        it 'allows to change the assignee' do
+          expect do
+            patch :update, id: issue.id, issue: valid_attributes
+          end.to change{
+            Issue.find(issue.id).assignee
+          }.to(user)
         end
 
         it 'assigns a requested issue as @issue' do
@@ -88,7 +96,8 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
         {
           title: 'No comments',
           description: 'I want to comment issues',
-          priority: 'critical'
+          priority: 'critical',
+          assignee_id: user.id
         }
       end
 
@@ -102,6 +111,11 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
         post :create, issue: valid_attributes
         expect(assigns(:issue)).to be_a(Issue)
         expect(assigns(:issue)).to be_persisted
+      end
+
+      it 'allows to set assignee' do
+        post :create, issue: valid_attributes
+        expect(assigns(:issue).assignee).to eq(user)
       end
     end
 
