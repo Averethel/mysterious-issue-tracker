@@ -30,6 +30,7 @@ HTTP Basic Auth (ommited in examples)
           "username": "test",
           "name": "Test",
           "surname": "Testy",
+          "role": "user",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
         },
@@ -54,6 +55,7 @@ HTTP Basic Auth (ommited in examples)
           "username": "averethel",
           "name": null,
           "surname": null,
+          "role": "user",
           "created_at": "2015-09-08T09:05:18.438Z",
           "updated_at": "2015-09-08T09:05:18.438Z"
         },
@@ -112,6 +114,7 @@ HTTP Basic Auth (ommited in examples)
           "username": "test",
           "name": "Test",
           "surname": "Testy",
+          "role": "user",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
         },
@@ -159,6 +162,7 @@ HTTP Basic Auth (ommited in examples)
           "username": "test",
           "name": "Test",
           "surname": "Testy",
+          "role": "user",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:04:51.520Z"
         },
@@ -196,9 +200,9 @@ HTTP Basic Auth (ommited in examples)
 ## Update a user
 ### PATCH /api/v1/users/:id
 #### body parameters:
-  * `user[username]`: STRING, required
-  * `user[password]`: STRING, required
-  * `user[password_confirmation]`: STRING, required
+  * `user[username]`: STRING
+  * `user[password]`: STRING
+  * `user[password_confirmation]`: STRING
   * `user[name]`: STRING
   * `user[surname]`: STRING
 
@@ -219,6 +223,7 @@ HTTP Basic Auth (ommited in examples)
         "attributes": {
           "username": "test",
           "name": "Test",
+          "role": "user",
           "surname": "Testy",
           "created_at": "2015-09-08T09:04:51.520Z",
           "updated_at": "2015-09-08T09:45:51.520Z"

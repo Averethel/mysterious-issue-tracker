@@ -38,6 +38,7 @@ RSpec.describe 'Users', type: :request do
           expect(attributes['username']).to eq(user.username)
           expect(attributes['name']).to eq(user.name)
           expect(attributes['surname']).to eq(user.surname)
+          expect(attributes['role']).to eq(user.role)
         end
       end
     end
