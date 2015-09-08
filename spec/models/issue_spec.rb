@@ -14,6 +14,7 @@ RSpec.describe Issue do
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:priority) }
   it { is_expected.to validate_presence_of(:status) }
+  it { is_expected.to validate_presence_of(:creator) }
 
   describe '#status' do
     let(:attributes) { {} }
