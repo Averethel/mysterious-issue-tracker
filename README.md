@@ -56,6 +56,34 @@
     }
   }
 ```
+
+## Get single user
+### GET /api/v1/users/:id
+#### Example
+```
+  resp = conn.get("/api/v1/users/1")
+```
+
+```
+  resp.status
+  => 200
+```
+
+```
+  resp.body
+  =>  {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:04:51.520Z"
+        }
+      }
+```
+
 ## List issues
 ### GET /api/v1/issues
 #### parameters:

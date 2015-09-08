@@ -1,4 +1,5 @@
 class Api::V1::UsersController < ApplicationController
+  before_action :set_user, only: [:show]
   ## Lists users
   #
   # GET /api/v1/users
@@ -60,5 +61,32 @@ class Api::V1::UsersController < ApplicationController
       on_page: @users.size,
       total_pages: @users.total_pages
     }
+  end
+
+  ## Gets single user
+  #
+  # GET /api/v1/users/:id
+  #
+  # = Example
+  #
+  #   resp = conn.get("/api/v1/users/1")
+  #
+  #   resp.status
+  #   => 200
+  #
+  #   resp.body
+  #   =>  {
+  #         "id": "1",
+  #         "type": "users",
+  #         "attributes": {
+  #           "username": "test",
+  #           "name": "Test",
+  #           "surname": "Testy",
+  #           "created_at": "2015-09-08T09:04:51.520Z",
+  #           "updated_at": "2015-09-08T09:04:51.520Z"
+  #         }
+  #       }
+  def show
+    render json: @user
   end
 end
