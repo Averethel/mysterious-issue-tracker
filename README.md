@@ -3,6 +3,57 @@
 ## Authentication method
 HTTP Basic Auth (ommited in examples)
 
+## Authorization
+Role base system with following permissions
+### guest
+#### Issues
+  * read
+
+#### Comments
+  * read
+
+#### Users
+  * read
+  * create
+
+### user
+#### Issues
+  * read
+  * create
+  * edit (if user is creator)
+  * destroy (if user is creator)
+
+#### Comments
+  * read
+  * create
+  * edit (if user is creator)
+  * destroy (if user is creator)
+
+#### Users
+  * read
+  * create
+  * edit (self)
+  * destroy (self)
+
+### admin
+#### Issues
+  * read
+  * create
+  * edit
+  * destroy
+
+#### Comments
+  * read
+  * create
+  * edit
+  * destroy
+
+#### Users
+  * read
+  * create
+  * edit
+  * destroy
+
 ## List all users
 ### GET /api/v1/users
 #### parameters:
