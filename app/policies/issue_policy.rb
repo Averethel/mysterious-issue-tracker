@@ -3,8 +3,16 @@ class IssuePolicy < ApplicationPolicy
     !user.guest?
   end
 
+  def take?
+    !user.guest?
+  end
+
+  def free?
+    admin_or_creator? || assignee?
+  end
+
   def update?
-    admin_or_creator?
+    admin_or_creator? || assignee?
   end
 
   def destroy?
@@ -12,12 +20,22 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def permitted_attributes
-    [:title, :description, :priority, :status]
+    return base_attributes if admin_or_creator?
+    return [:status] if assignee?
+    base_attributes
   end
 
   private
 
   def admin_or_creator?
     user.admin? || user.id == record.creator_id
+  end
+
+  def assignee?
+    user.id == record.assignee_id
+  end
+
+  def base_attributes
+    [:assignee_id, :title, :description, :priority, :status]
   end
 end

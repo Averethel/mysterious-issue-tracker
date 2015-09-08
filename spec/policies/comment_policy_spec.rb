@@ -3,7 +3,7 @@ require 'rails_helper'
 describe CommentPolicy do
   subject { described_class.new(user, comment) }
   let(:issue) { FactoryGirl.create(:issue) }
-  let(:comment) { FactoryGirl.create(:comment, issue: issue, creator: creator)}
+  let(:comment) { FactoryGirl.create(:comment, issue: issue, creator: creator) }
 
   context 'with guest' do
     let(:user) { FactoryGirl.build(:guest) }

@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   validates :role, presence: true
 
   has_many :issues, foreign_key: :creator_id
+  has_many :assigned_issues, foreign_key: :assignee_id, class_name: Issue
   has_many :comments, foreign_key: :creator_id
 
   def role

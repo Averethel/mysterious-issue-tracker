@@ -7,6 +7,11 @@ RSpec.describe Api::V1::UsersController, type: :routing do
         .to route_to('api/v1/users#index', format: :json)
     end
 
+    it 'routes to #me' do
+      expect(get: '/api/v1/users/me')
+        .to route_to('api/v1/users#me', format: :json)
+    end
+
     it 'routes to #show' do
       expect(get: '/api/v1/users/1')
         .to route_to('api/v1/users#show', id: '1', format: :json)

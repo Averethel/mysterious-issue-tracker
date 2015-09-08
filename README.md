@@ -13,27 +13,39 @@ Role base system with following permissions
   * read
 
 #### Users
+  * me
   * read
   * create
 
 ### user
-#### Issues
+#### Issue
   * read
   * create
-  * edit (if user is creator)
-  * destroy (if user is creator)
+  * take
+  * free
+    * only if assignee
+  * edit
+    * status if assignee
+    * full if creator
+  * destroy
+    * only if creator
 
 #### Comments
   * read
   * create
-  * edit (if user is creator)
-  * destroy (if user is creator)
+  * edit
+    * only if creator
+  * destroy
+    * only if creator
 
 #### Users
+  * me
   * read
   * create
-  * edit (self)
-  * destroy (self)
+  * edit
+    * only self
+  * destroy
+    * only self
 
 ### admin
 #### Issues
@@ -49,6 +61,7 @@ Role base system with following permissions
   * destroy
 
 #### Users
+  * me
   * read
   * create
   * edit
@@ -94,6 +107,14 @@ Role base system with following permissions
               }
             ]
           },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "1",
+                "type": "issues"
+              }
+            ]
+          },
           "comments": {
             "data": []
           }
@@ -115,6 +136,14 @@ Role base system with following permissions
             "data": [
               {
                 "id": "1",
+                "type": "issues"
+              }
+            ]
+          },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "2",
                 "type": "issues"
               }
             ]
@@ -143,6 +172,56 @@ Role base system with following permissions
     }
   }
 ```
+
+## Get current user
+### GET /api/v1/users/me
+#### Example
+```
+  resp = conn.get("/api/v1/users/me")
+```
+
+```
+  resp.status
+  => 200
+```
+
+```
+  resp.body
+  =>  {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "role": "user",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:04:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "1",
+                "type": "issues"
+              }
+            ]
+          },
+          "comments": {
+            "data": []
+          }
+        }
+      }
+```
+
 
 ## Get single user
 ### GET /api/v1/users/:id
@@ -174,6 +253,14 @@ Role base system with following permissions
             "data": [
               {
                 "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "1",
                 "type": "issues"
               }
             ]
@@ -220,6 +307,9 @@ Role base system with following permissions
         },
         "relationships": {
           "issues": {
+            "data": []
+          },
+          "assigned_issues": {
             "data": []
           },
           "comments": {
@@ -286,6 +376,14 @@ Role base system with following permissions
             "data": [
               {
                 "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "assigned_issues": {
+            "data": [
+              {
+                "id": "1",
                 "type": "issues"
               }
             ]
@@ -462,6 +560,7 @@ Role base system with following permissions
   * `issue[tite]`: STRING, required
   * `issue[description]`: STRING, required
   * `issue[priority]`: STRING, required, [minor, major, critical, blocker]
+  * `issue[assignee_id]`: INTEGER - user id
 
 #### Examples
 ```
@@ -527,6 +626,51 @@ Role base system with following permissions
       }
 ```
 
+## Assign the issue to current_user
+### PATCH /api/v1/issues/:id/take
+### Examples
+```
+  resp = conn.patch("/api/v1/issues/1/take")
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  {
+        "data":{
+          "id":"1",
+          "type":"issues",
+          "attributes":{
+            "title":"No comments",
+            "description":"Can't comment issues",
+            "priority":"major",
+            "status":"open",
+            "created_at":"2015-09-06T15:53:51.594Z",
+            "updated_at":"2015-09-06T15:53:51.594Z"
+          },
+          "relationships": {
+            "comments": {
+              "data": []
+            },
+           "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
+            },
+            "assignee": {
+              "data": {
+                "id": "1",
+                "type": "users"
+              }
+            }
+          }
+        }
+      }
+```
+
 ## Update an issue
 ### PATCH /api/v1/issues/:id
 #### body parameters:
@@ -534,6 +678,7 @@ Role base system with following permissions
   * `issue[description]`: STRING
   * `issue[priority]`: STRING, [minor, major, critical, blocker]
   * `issue[status]`: STRING, [open, in_progress, fixed, rejected]
+  * `issue[assignee_id]`: INTEGER - user id
 
 #### Examples
 ```

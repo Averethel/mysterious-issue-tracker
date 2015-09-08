@@ -3,9 +3,18 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
-      resources :users, except: [:new, :edit]
+      resources :users, except: [:new, :edit] do
+        get :me, on: :collection
+      end
 
       resources :issues, except: [:new, :edit] do
+        member do
+          patch :take
+          put :take
+          patch :free
+          put :free
+        end
+
         resources :comments, only: [:index, :create]
       end
 

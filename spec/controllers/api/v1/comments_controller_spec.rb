@@ -78,7 +78,7 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     end
 
     context 'when authorized' do
-      let(:user){ comment.creator }
+      let(:user) { comment.creator }
 
       before do
         allow_any_instance_of(ApplicationController)

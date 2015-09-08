@@ -9,6 +9,7 @@ RSpec.describe UserPolicy do
 
     it { is_expected.to permit_action(:show) }
     it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:me) }
 
     it { is_expected.not_to permit_action(:update) }
     it { is_expected.not_to permit_action(:destroy) }
@@ -19,6 +20,7 @@ RSpec.describe UserPolicy do
 
     it { is_expected.to permit_action(:show) }
     it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:me) }
 
     context 'for other user' do
       it { is_expected.not_to permit_action(:update) }
@@ -38,6 +40,7 @@ RSpec.describe UserPolicy do
 
     it { is_expected.to permit_action(:show) }
     it { is_expected.to permit_action(:create) }
+    it { is_expected.to permit_action(:me) }
 
     it { is_expected.to permit_action(:update) }
     it { is_expected.to permit_action(:destroy) }

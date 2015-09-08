@@ -19,8 +19,76 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
     end
   end
 
-  describe 'PATCH #update' do
+  describe 'PATCH #take' do
     let!(:issue) { FactoryGirl.create(:issue) }
+
+    context 'when authorized' do
+      let(:user) { FactoryGirl.create(:user) }
+
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(user)
+      end
+
+      it 'assigns the requested issue as @issue' do
+        patch :take, id: issue.to_param
+        expect(assigns(:issue)).to eq(issue)
+      end
+
+      it 'assigns current_user to issue' do
+        expect do
+          patch :take, id: issue.to_param
+        end.to change{
+          issue.reload.assignee
+        }.to(user)
+      end
+    end
+
+    context 'when not authorized' do
+      it 'is not found' do
+        patch :take, id: issue.to_param
+        expect(response).to be_not_found
+      end
+    end
+  end
+
+  describe 'PATCH #free' do
+    let!(:issue) { FactoryGirl.create(:issue, assignee: assignee) }
+    let(:assignee) { FactoryGirl.create(:user) }
+
+    context 'when authorized' do
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(assignee)
+      end
+
+      it 'assigns the requested issue as @issue' do
+        patch :free, id: issue.to_param
+        expect(assigns(:issue)).to eq(issue)
+      end
+
+      it 'assigns current_user to issue' do
+        expect do
+          patch :free, id: issue.to_param
+        end.to change{
+          issue.reload.assignee
+        }.to(nil)
+      end
+    end
+
+    context 'when not authorized' do
+      it 'is not found' do
+        patch :free, id: issue.to_param
+        expect(response).to be_not_found
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    let(:assignee) { FactoryGirl.create(:user) }
+    let!(:issue) { FactoryGirl.create(:issue, assignee: assignee) }
     let(:invalid_attributes) do
       {
         title: ''
@@ -28,13 +96,13 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
     end
     let(:valid_attributes) do
       {
-        title: 'No comments'
+        title: 'No comments',
+        assignee_id: issue.creator.id
       }
     end
 
-
     context 'when authorized' do
-      let(:user){ issue.creator }
+      let(:user) { issue.creator }
 
       before do
         allow_any_instance_of(ApplicationController)
@@ -51,6 +119,14 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
           }.to('No comments')
         end
 
+        it 'allows to change the assignee' do
+          expect do
+            patch :update, id: issue.id, issue: valid_attributes
+          end.to change{
+            Issue.find(issue.id).assignee
+          }.to(user)
+        end
+
         it 'assigns a requested issue as @issue' do
           patch :update, id: issue.id, issue: valid_attributes
           expect(assigns(:issue)).to be_a(Issue)
@@ -62,6 +138,38 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
         it 'assigns an issue as @issue' do
           patch :update, id: issue.id, issue: invalid_attributes
           expect(assigns(:issue)).to be_a(Issue)
+        end
+      end
+
+      context 'as assignee' do
+        let(:valid_attributes) do
+          {
+            title: 'new title',
+            description: 'new description',
+            priority: 'major'
+          }
+        end
+
+        before do
+          allow_any_instance_of(ApplicationController)
+            .to receive(:current_user)
+            .and_return(assignee)
+        end
+
+        it 'allows to change status' do
+          expect do
+            patch :update, id: issue.id, issue: { status: 'in_progress' }
+          end.to change{
+            Issue.find(issue.id).status
+          }.to('in_progress')
+        end
+
+        it 'prevents from changing other attributes' do
+          expect do
+            patch :update, id: issue.id, issue: valid_attributes
+          end.not_to change{
+            Issue.find(issue.id).attributes
+          }
         end
       end
     end
@@ -88,7 +196,8 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
         {
           title: 'No comments',
           description: 'I want to comment issues',
-          priority: 'critical'
+          priority: 'critical',
+          assignee_id: user.id
         }
       end
 
@@ -102,6 +211,11 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
         post :create, issue: valid_attributes
         expect(assigns(:issue)).to be_a(Issue)
         expect(assigns(:issue)).to be_persisted
+      end
+
+      it 'allows to set assignee' do
+        post :create, issue: valid_attributes
+        expect(assigns(:issue).assignee).to eq(user)
       end
     end
 

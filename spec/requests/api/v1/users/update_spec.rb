@@ -4,7 +4,7 @@ RSpec.describe 'Users', type: :request do
   describe 'PATCH /api/v1/users/1' do
     let(:user) { FactoryGirl.create(:user) }
     let(:body) { JSON.parse(response.body) }
-    let!(:admin) {FactoryGirl.create(:admin, username: 'test', password: 'test') }
+    let!(:admin) { FactoryGirl.create(:admin, username: 'test', password: 'test') }
 
     before do
       env = { 'HTTP_AUTHORIZATION': ActionController::HttpAuthentication::Basic.encode_credentials('test', 'test') }

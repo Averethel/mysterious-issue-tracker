@@ -9,4 +9,5 @@ class IssueSerializer < ActiveModel::Serializer
 
   has_many :comments
   belongs_to :creator
+  belongs_to :assignee
 end
