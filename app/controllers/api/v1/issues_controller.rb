@@ -250,7 +250,7 @@ class Api::V1::IssuesController < ApplicationController
 
   ## Deletes an issue
   #
-  # DELETE /issues/:id
+  # DELETE /api/v1/issues/:id
   #
   # = Examples
   #

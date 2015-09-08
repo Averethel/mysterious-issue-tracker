@@ -233,7 +233,7 @@
 ```
 
 ## Delete an issue
-### DELETE /issues/:id
+### DELETE /api/v1/issues/:id
 #### Examples
 ```
   resp = conn.delete("/api/v1/issues/1")
@@ -455,7 +455,7 @@
 ```
 
 ## Delete a comment
-### DELETE /comments/:id
+### DELETE /api/v1/comments/:id
 ### Examples
 ```
   resp = conn.delete("/api/v1/comments/1")

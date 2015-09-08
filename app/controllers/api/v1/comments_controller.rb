@@ -233,7 +233,7 @@ class Api::V1::CommentsController < ApplicationController
 
   ## Deletes a comment
   #
-  # DELETE /comments/:id
+  # DELETE /api/v1/comments/:id
   #
   # = Examples
   #
