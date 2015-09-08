@@ -87,7 +87,8 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
   end
 
   describe 'PATCH #update' do
-    let!(:issue) { FactoryGirl.create(:issue) }
+    let(:assignee) { FactoryGirl.create(:user) }
+    let!(:issue) { FactoryGirl.create(:issue, assignee: assignee) }
     let(:invalid_attributes) do
       {
         title: ''
@@ -137,6 +138,38 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
         it 'assigns an issue as @issue' do
           patch :update, id: issue.id, issue: invalid_attributes
           expect(assigns(:issue)).to be_a(Issue)
+        end
+      end
+
+      context 'as assignee' do
+        let(:valid_attributes) do
+          {
+            title: 'new title',
+            description: 'new description',
+            priority: 'major'
+          }
+        end
+
+        before do
+          allow_any_instance_of(ApplicationController)
+            .to receive(:current_user)
+            .and_return(assignee)
+        end
+
+        it 'allows to change status' do
+          expect do
+            patch :update, id: issue.id, issue: { status: 'in_progress' }
+          end.to change{
+            Issue.find(issue.id).status
+          }.to('in_progress')
+        end
+
+        it 'prevents from changing other attributes' do
+          expect do
+            patch :update, id: issue.id, issue: valid_attributes
+          end.not_to change{
+            Issue.find(issue.id).attributes
+          }
         end
       end
     end

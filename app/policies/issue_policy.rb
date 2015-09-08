@@ -12,7 +12,7 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def update?
-    admin_or_creator?
+    admin_or_creator? || assignee?
   end
 
   def destroy?
@@ -20,6 +20,8 @@ class IssuePolicy < ApplicationPolicy
   end
 
   def permitted_attributes
+    return base_attributes if admin_or_creator?
+    return [:status] if assignee?
     base_attributes
   end
 
