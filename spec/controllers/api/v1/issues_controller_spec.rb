@@ -37,7 +37,7 @@ RSpec.describe Api::V1::IssuesController, type: :controller do
         }.to('No comments')
       end
 
-      it 'assigns a newly created issue as @issue' do
+      it 'assigns a requested issue as @issue' do
         patch :update, id: issue.id, issue: valid_attributes
         expect(assigns(:issue)).to be_a(Issue)
         expect(assigns(:issue)).to be_persisted

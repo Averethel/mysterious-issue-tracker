@@ -1,5 +1,5 @@
 class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show]
+  before_action :set_user, only: [:show, :update]
   ## Lists users
   #
   # GET /api/v1/users
@@ -143,6 +143,60 @@ class Api::V1::UsersController < ApplicationController
       validation_errors(@user.errors)
     end
   end
+
+  ## Updates a user
+  #
+  # PATCH /api/v1/users/:id
+  # body parameters:
+  #   user[username]: STRING
+  #   user[password]: STRING
+  #   user[password_confirmation]: STRING, required if password changed
+  #   user[name]: STRING
+  #   user[surname]: STRING
+  #
+  # = Examples
+  #
+  #   resp = conn.patch("/api/v1/users/1", {user: {username: 'tester', password: 'test', password_confirmation: 'test', name: 'Test', surname: 'Testy'}})
+  #
+  #   resp.status
+  #   => 200
+  #
+  #   resp.body
+  #   =>  {
+  #         "id": "1",
+  #         "type": "users",
+  #         "attributes": {
+  #           "username": "test",
+  #           "name": "Test",
+  #           "surname": "Testy",
+  #           "created_at": "2015-09-08T09:04:51.520Z",
+  #           "updated_at": "2015-09-08T09:45:51.520Z"
+  #         }
+  #       }
+  #
+  #   resp = conn.patch("/api/v1/users/1", {user: {username: ''})
+  #
+  #   resp.status
+  #   => 422
+  #
+  #   resp.body
+  #   => {
+  #        "errors":[
+  #          {
+  #            "status":"422",
+  #            "title":"Invalid username",
+  #            "detail":"can't be blank"
+  #          }
+  #        ]
+  #      }
+  def update
+    if @user.update(user_params)
+      render json: @user
+    else
+      validation_errors(@user.errors)
+    end
+  end
+
   private
 
   def set_user

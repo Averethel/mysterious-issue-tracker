@@ -137,6 +137,59 @@
         ]
       }
 ```
+
+## Update a user
+### PATCH /api/v1/users/:id
+#### body parameters:
+  * `user[username]`: STRING, required
+  * `user[password]`: STRING, required
+  * `user[password_confirmation]`: STRING, required
+  * `user[name]`: STRING
+  * `user[surname]`: STRING
+
+#### Examples
+```
+  resp = conn.patch("/api/v1/users/1", {user: {username: 'tester', password: 'test', password_confirmation: 'test', name: 'Test', surname: 'Testy'}})
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  resp.body
+  =>  {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:45:51.520Z"
+        }
+      }
+```
+```
+  resp = conn.patch("/api/v1/users/1", {user: {username: ''})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+       "errors":[
+         {
+           "status":"422",
+           "title":"Invalid username",
+           "detail":"can't be blank"
+         }
+       ]
+     }
+```
+
 ## List issues
 ### GET /api/v1/issues
 #### parameters:

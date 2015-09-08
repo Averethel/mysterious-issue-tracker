@@ -54,4 +54,42 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    let!(:user) { FactoryGirl.create(:user) }
+
+    context 'with valid params' do
+      let(:valid_attributes) do
+        {
+          username: 'changed_username'
+        }
+      end
+
+      it 'changes the user' do
+        expect do
+          patch :update, id: user.to_param, user: valid_attributes
+        end.to change{
+          User.find(user.id).username
+        }.to 'changed_username'
+      end
+
+      it 'assigns the requested user as @user' do
+        put :update, id: user.to_param, user: valid_attributes
+        expect(assigns(:user)).to eq(user)
+      end
+    end
+
+    context 'with invalid params' do
+      let(:invalid_attributes) do
+        {
+          password: ''
+        }
+      end
+
+      it 'assigns the user as @user' do
+        put :update, id: user.to_param, user: invalid_attributes
+        expect(assigns(:user)).to eq(user)
+      end
+    end
+  end
 end
