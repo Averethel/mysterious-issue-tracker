@@ -3,6 +3,7 @@ FactoryGirl.define do
     sequence(:title) { |n| "Important issue #{n}" }
     description { "Description of #{title}" }
     priority { Issue.priorities.keys.sample }
+    association :creator, factory: :user
 
     factory :issue_with_comments do
       transient do

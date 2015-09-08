@@ -1,5 +1,274 @@
 # Mysterious Issue Tracker API
 
+## Authentication method
+HTTP Basic Auth (ommited in examples)
+
+## List all users
+### GET /api/v1/users
+#### parameters:
+  * `page[size]`: INTEGER
+  * `page[number]`: INTEGER
+
+#### Example
+```
+  resp = conn.get("/api/v1/users")
+```
+
+```
+  resp.status
+  => 200
+```
+
+```
+  resp.body
+  => {
+    "data": [
+      {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:04:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "comments": {
+            "data": []
+          }
+        }
+      },
+      {
+        "id": "2",
+        "type": "users",
+        "attributes": {
+          "username": "averethel",
+          "name": null,
+          "surname": null,
+          "created_at": "2015-09-08T09:05:18.438Z",
+          "updated_at": "2015-09-08T09:05:18.438Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "1",
+                "type": "issues"
+              }
+            ]
+          },
+          "comments": {
+            "data": [
+              {
+                "id": "1",
+                "type": "comments"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "links": {
+      "self": "http://mysterious-issue-tracker.dev/api/v1/users?page%5Bnumber%5D=1&page%5Bsize%5D=2",
+      "next": "http://mysterious-issue-tracker.dev/api/v1/users?page%5Bnumber%5D=2&page%5Bsize%5D=2",
+      "last": "http://mysterious-issue-tracker.dev/api/v1/users?page%5Bnumber%5D=2&page%5Bsize%5D=2"
+    },
+    "meta": {
+      "total": 3,
+      "current_page": 1,
+      "on_page": 2,
+      "total_pages": 2
+    }
+  }
+```
+
+## Get single user
+### GET /api/v1/users/:id
+#### Example
+```
+  resp = conn.get("/api/v1/users/1")
+```
+
+```
+  resp.status
+  => 200
+```
+
+```
+  resp.body
+  =>  {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:04:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "comments": {
+            "data": []
+          }
+        }
+      }
+```
+
+## Create a user
+### POST /api/v1/users
+#### body parameters:
+  * `user[username]`: STRING, required
+  * `user[password]`: STRING, required
+  * `user[password_confirmation]`: STRING, required
+  * `user[name]`: STRING
+  * `user[surname]`: STRING
+
+#### Examples
+```
+  resp = conn.post("/api/v1/users/", {user: {username: 'tester', password: 'test', password_confirmation: 'test', name: 'Test', surname: 'Testy'}})
+```
+
+```
+  resp.status
+  => 201
+```
+
+```
+  resp.body
+  =>  {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:04:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": []
+          },
+          "comments": {
+            "data": []
+          }
+        }
+      }
+```
+
+```
+  resp = conn.post("/api/v1/users/", {user: {username: 'tester'})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+        "errors":[
+          {
+            "status":"422",
+            "title":"Invalid password",
+            "detail":"can't be blank"
+          }
+        ]
+      }
+```
+
+## Update a user
+### PATCH /api/v1/users/:id
+#### body parameters:
+  * `user[username]`: STRING, required
+  * `user[password]`: STRING, required
+  * `user[password_confirmation]`: STRING, required
+  * `user[name]`: STRING
+  * `user[surname]`: STRING
+
+#### Examples
+```
+  resp = conn.patch("/api/v1/users/1", {user: {username: 'tester', password: 'test', password_confirmation: 'test', name: 'Test', surname: 'Testy'}})
+```
+```
+  resp.status
+  => 200
+```
+```
+  resp.body
+  =>  resp.body
+  =>  {
+        "id": "1",
+        "type": "users",
+        "attributes": {
+          "username": "test",
+          "name": "Test",
+          "surname": "Testy",
+          "created_at": "2015-09-08T09:04:51.520Z",
+          "updated_at": "2015-09-08T09:45:51.520Z"
+        },
+        "relationships": {
+          "issues": {
+            "data": [
+              {
+                "id": "2",
+                "type": "issues"
+              }
+            ]
+          },
+          "comments": {
+            "data": []
+          }
+        }
+      }
+```
+```
+  resp = conn.patch("/api/v1/users/1", {user: {username: ''})
+```
+```
+  resp.status
+  => 422
+```
+```
+  resp.body
+  => {
+       "errors":[
+         {
+           "status":"422",
+           "title":"Invalid username",
+           "detail":"can't be blank"
+         }
+       ]
+     }
+```
+
+## Delete a user
+### DELETE /api/v1/users/:id
+#### Examples
+```
+  resp = conn.delete("/api/v1/users/1")
+```
+```
+  resp.status
+  => 204
+```
+
 ## List issues
 ### GET /api/v1/issues
 #### parameters:
@@ -39,6 +308,12 @@
                     "id": "1"
                   }
                 ]
+              },
+              "creator": {
+                "data": {
+                  "id": "1",
+                  "type": "users"
+                }
               }
             }
           },
@@ -56,6 +331,12 @@
             "relationships": {
               "comments": {
                 "data": []
+              },
+              "creator": {
+                "data": {
+                  "id": "2",
+                  "type": "users"
+                }
               }
             }
           }
@@ -103,6 +384,12 @@
           "relationships": {
             "comments": {
               "data": []
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
             }
           }
         }
@@ -111,6 +398,8 @@
 
 ## Create an issue
 ### POST /api/v1/issues
+#### restrictions
+  must be authenticated
 #### body parameters:
   * `issue[tite]`: STRING, required
   * `issue[description]`: STRING, required
@@ -143,6 +432,12 @@
           "relationships": {
             "comments": {
               "data": []
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
             }
           }
         }
@@ -207,6 +502,12 @@
           "relationships": {
             "comments": {
               "data": []
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
             }
           }
         }
@@ -275,6 +576,12 @@
                    "type": "issues",
                    "id": "1"
                  }
+               },
+               "creator": {
+                 "data": {
+                   "id": "2",
+                   "type": "users"
+                 }
                }
              }
            },
@@ -292,6 +599,12 @@
                    "type": "issues",
                    "id": "1"
                  }
+               },
+               "creator": {
+                 "data": {
+                   "id": "1",
+                   "type": "users"
+                 }
                }
              }
            }
@@ -307,7 +620,6 @@
             "on_page": 2,
             "total_pages": 2
          }
-
        }
 ```
 
@@ -338,6 +650,12 @@
                 "type": "issues",
                 "id": "1"
               }
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
+              }
             }
           }
         }
@@ -346,6 +664,8 @@
 
 ## Comment on given issue
 ### POST /api/v1/issues/:issue_id/comments
+#### restrictions
+  must be authenticated
 #### body parameters:
   * `comment[body]`: STRING
 
@@ -373,6 +693,12 @@
               "data": {
                 "type": "issues",
                 "id": "1"
+              }
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
               }
             }
           }
@@ -428,6 +754,12 @@
               "data": {
                 "type": "issues",
                 "id": "1"
+              }
+            },
+            "creator": {
+              "data": {
+                "id": "2",
+                "type": "users"
               }
             }
           }

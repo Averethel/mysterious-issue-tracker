@@ -8,4 +8,5 @@ class IssueSerializer < ActiveModel::Serializer
              :updated_at
 
   has_many :comments
+  belongs_to :creator
 end

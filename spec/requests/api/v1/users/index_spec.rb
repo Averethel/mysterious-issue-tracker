@@ -1,13 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe 'Comments', type: :request do
-  describe 'GET /api/v1/issues/1/comments' do
-    let!(:issue) { FactoryGirl.create(:issue_with_comments, comment_count: 2) }
-    let!(:comment) { FactoryGirl.create(:comment) }
+RSpec.describe 'Users', type: :request do
+  describe 'GET /api/v1/users' do
+    let!(:user1) { FactoryGirl.create(:user) }
+    let!(:user2) { FactoryGirl.create(:user) }
     let(:body) { JSON.parse(response.body) }
 
     before do
-      get api_v1_issue_comments_path(issue, page: { size: 1 })
+      get api_v1_users_path(page: { size: 1 })
     end
 
     context 'metadata' do
@@ -16,6 +16,7 @@ RSpec.describe 'Comments', type: :request do
       it 'includes total' do
         expect(metadata['total']).to eq(2)
       end
+
       it 'includes current_page' do
         expect(metadata['current_page']).to eq(1)
       end
@@ -34,42 +35,43 @@ RSpec.describe 'Comments', type: :request do
 
       it 'includes link to self' do
         expect(links['self'])
-          .to eq(api_v1_issue_comments_url(issue,             page: { size: 1, number: 1 }))
+          .to eq(api_v1_users_url(page: { size: 1, number: 1 }))
       end
 
       it 'includes link to next' do
         expect(links['next'])
-          .to eq(api_v1_issue_comments_url(issue,             page: { size: 1, number: 2 }))
+          .to eq(api_v1_users_url(page: { size: 1, number: 2 }))
       end
 
       it 'includes link to last' do
         expect(links['last'])
-          .to eq(api_v1_issue_comments_url(issue,             page: { size: 1, number: 2 }))
+          .to eq(api_v1_users_url(page: { size: 1, number: 2 }))
       end
     end
 
     context 'data' do
       let(:data) { body['data'] }
 
-      it 'has page size comments' do
+      it 'has page sieze users' do
         expect(data.size).to eq(1)
       end
 
-      context 'for single issue' do
-        let(:issue_data) { data.first }
-        let(:attributes) { issue_data['attributes'] }
-        let(:comment) { issue.comments.last }
+      context 'for single user' do
+        let(:user_data) { data.first }
+        let(:attributes) { user_data['attributes'] }
 
         it 'includes id' do
-          expect(issue_data['id']).to eq(comment.id.to_s)
+          expect(user_data['id']).to eq(user1.id.to_s)
         end
 
         it 'includes type' do
-          expect(issue_data['type']).to eq('comments')
+          expect(user_data['type']).to eq('users')
         end
 
-        it 'includes comment attributes' do
-          expect(attributes['body']).to eq(comment.body)
+        it 'includes user attributes' do
+          expect(attributes['username']).to eq(user1.username)
+          expect(attributes['name']).to eq(user1.name)
+          expect(attributes['surname']).to eq(user1.surname)
         end
       end
     end

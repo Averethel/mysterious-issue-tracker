@@ -22,6 +22,13 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
 
   describe 'POST #create' do
     let!(:issue) { FactoryGirl.create(:issue) }
+    let(:user) { FactoryGirl.create(:user) }
+
+    before do
+      allow_any_instance_of(ApplicationController)
+        .to receive(:current_user)
+        .and_return(user)
+    end
 
     context 'with valid params' do
       let(:valid_attributes) do

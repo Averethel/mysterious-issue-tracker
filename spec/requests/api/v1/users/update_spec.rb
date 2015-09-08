@@ -1,46 +1,45 @@
 require 'rails_helper'
 
-RSpec.describe 'Comments', type: :request do
-  describe 'POST /api/v1/comments' do
-    let!(:user) { FactoryGirl.create(:user, username: 'test', password: 'test') }
+RSpec.describe 'Users', type: :request do
+  describe 'PATCH /api/v1/users/1' do
+    let(:user) { FactoryGirl.create(:user) }
     let(:body) { JSON.parse(response.body) }
 
     before do
-      issue = FactoryGirl.create(:issue)
-      env = { 'HTTP_AUTHORIZATION': ActionController::HttpAuthentication::Basic.encode_credentials('test', 'test') }
-      post api_v1_issue_comments_path(issue.id), params, env
+      patch api_v1_user_path(user), params
     end
 
     context 'with valid params' do
       let(:params) do
         {
-          comment: {
-            body: '+1'
+          user: {
+            username: 'changed_username'
           }
         }
       end
 
       context 'data' do
-        let(:comment) { Comment.last }
         let(:data) { body['data'] }
         let(:attributes) { data['attributes'] }
 
         it 'includes id' do
-          expect(data['id']).to eq(comment.id.to_s)
+          expect(data['id']).to eq(user.id.to_s)
         end
 
         it 'includes type' do
-          expect(data['type']).to eq('comments')
+          expect(data['type']).to eq('users')
         end
 
-        it 'includes comment attributes' do
-          expect(attributes['body']).to eq(comment.body)
+        it 'includes user attributes' do
+          expect(attributes['username']).to eq('changed_username')
+          expect(attributes['name']).to eq(user.name)
+          expect(attributes['surname']).to eq(user.surname)
         end
       end
     end
 
     context 'with invalid params:' do
-      context 'missing comment param' do
+      context 'missing user param' do
         let(:params) { {} }
         let(:error) { body['errors'].first }
 
@@ -51,12 +50,12 @@ RSpec.describe 'Comments', type: :request do
 
         it 'resurns error message' do
           expect(error['title']).to eq('Invalid JSON submitted')
-          expect(error['detail']).to eq('param is missing or the value is empty: comment')
+          expect(error['detail']).to eq('param is missing or the value is empty: user')
         end
       end
 
       context 'validation errors' do
-        let(:params) { { comment: { body: '' } } }
+        let(:params) { { user: { username: '', password: '' } } }
         let(:errors) { body['errors'] }
 
         it 'is unprocessable entity' do
@@ -66,7 +65,7 @@ RSpec.describe 'Comments', type: :request do
         it 'resurns errors' do
           errors.each do |error|
             expect(error['status']).to eq('422')
-            expect(['Invalid body']).to include(error['title'])
+            expect(['Invalid username', 'Invalid password']).to include(error['title'])
             expect(['can\'t be blank']).to include(error['detail'])
           end
         end

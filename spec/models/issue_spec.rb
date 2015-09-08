@@ -5,6 +5,7 @@ RSpec.describe Issue do
   subject { described_class.new(attributes) }
 
   it { is_expected.to have_many(:comments) }
+  it { is_expected.to belong_to(:creator) }
 
   it { is_expected.to define_enum_for(:status) }
   it { is_expected.to define_enum_for(:priority) }
@@ -13,6 +14,7 @@ RSpec.describe Issue do
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:priority) }
   it { is_expected.to validate_presence_of(:status) }
+  it { is_expected.to validate_presence_of(:creator) }
 
   describe '#status' do
     let(:attributes) { {} }

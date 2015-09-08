@@ -5,6 +5,8 @@ RSpec.describe Comment do
   subject { described_class.new(attributes) }
 
   it { is_expected.to belong_to(:issue) }
+  it { is_expected.to belong_to(:creator) }
 
   it { is_expected.to validate_presence_of(:body) }
+  it { is_expected.to validate_presence_of(:creator) }
 end
