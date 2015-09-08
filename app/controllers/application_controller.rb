@@ -11,6 +11,7 @@ class ApplicationController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from ActionController::ParameterMissing, with: :invalid_params
   rescue_from AuthenticationService::AuthenticationError, with: :authentication_error
+  rescue_from Pundit::NotAuthorizedError, with: :not_found_authorization
 
   private
 
@@ -25,6 +26,12 @@ class ApplicationController < ActionController::API
         title: 'Record not found',
         detail: error.message
       }] }, status: :not_found
+  end
+
+  def not_found_authorization(error)
+    id = error.record.id
+    message = "Couldn't find #{error.record.class} with 'id'=#{id}"
+    not_found(OpenStruct.new(message: message))
   end
 
   def invalid_params(error)

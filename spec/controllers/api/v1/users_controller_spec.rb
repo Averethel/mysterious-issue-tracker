@@ -24,7 +24,8 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         {
           username: 'test',
           password: 'test',
-          password_confirmation: 'test'
+          password_confirmation: 'test',
+          role: 'admin'
         }
       end
 
@@ -38,6 +39,27 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         post :create, user: valid_attributes
         expect(assigns(:user)).to be_a(User)
         expect(assigns(:user)).to be_persisted
+      end
+
+      context 'as admin' do
+        before do
+          allow_any_instance_of(ApplicationController)
+            .to receive(:current_user)
+            .and_return(FactoryGirl.create(:admin))
+        end
+
+        it 'allows to assign role' do
+          post :create, user: valid_attributes
+          expect(assigns(:user)).to be_a(User)
+          expect(assigns(:user)).to be_admin
+        end
+      end
+
+      context 'as non admin' do
+        it 'defaukts role to user' do
+          post :create, user: valid_attributes
+          expect(assigns(:user)).to be_user
+        end
       end
     end
 
@@ -57,38 +79,51 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
   describe 'PATCH #update' do
     let!(:user) { FactoryGirl.create(:user) }
+    let(:valid_attributes) do
+      {
+        username: 'changed_username'
+      }
+    end
+    let(:invalid_attributes) do
+      {
+        password: ''
+      }
+    end
 
-    context 'with valid params' do
-      let(:valid_attributes) do
-        {
-          username: 'changed_username'
-        }
+    context 'when authorized' do
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(FactoryGirl.create(:admin))
       end
 
-      it 'changes the user' do
-        expect do
-          patch :update, id: user.to_param, user: valid_attributes
-        end.to change{
-          User.find(user.id).username
-        }.to 'changed_username'
+      context 'with valid params' do
+        it 'changes the user' do
+          expect do
+            patch :update, id: user.to_param, user: valid_attributes
+          end.to change{
+            User.find(user.id).username
+          }.to 'changed_username'
+        end
+
+        it 'assigns the requested user as @user' do
+          put :update, id: user.to_param, user: valid_attributes
+          expect(assigns(:user)).to eq(user)
+        end
       end
 
-      it 'assigns the requested user as @user' do
-        put :update, id: user.to_param, user: valid_attributes
-        expect(assigns(:user)).to eq(user)
+      context 'with invalid params' do
+        it 'assigns the user as @user' do
+          put :update, id: user.to_param, user: invalid_attributes
+          expect(assigns(:user)).to eq(user)
+        end
       end
     end
 
-    context 'with invalid params' do
-      let(:invalid_attributes) do
-        {
-          password: ''
-        }
-      end
-
-      it 'assigns the user as @user' do
-        put :update, id: user.to_param, user: invalid_attributes
-        expect(assigns(:user)).to eq(user)
+    context 'when not authorized' do
+      it 'is not found' do
+        put :update, id: user.to_param, user: valid_attributes
+        expect(response).to be_not_found
       end
     end
   end
@@ -96,10 +131,25 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   describe 'DELETE #destroy' do
     let!(:user) { FactoryGirl.create(:user) }
 
-    it 'destroys the requested user' do
-      expect do
+    context 'when authorized' do
+      before do
+        allow_any_instance_of(ApplicationController)
+          .to receive(:current_user)
+          .and_return(FactoryGirl.create(:admin))
+      end
+
+      it 'destroys the requested user' do
+        expect do
+          delete :destroy, id: user.to_param
+        end.to change(User, :count).by(-1)
+      end
+    end
+
+    context 'when not authorized' do
+      it 'is not found' do
         delete :destroy, id: user.to_param
-      end.to change(User, :count).by(-1)
+        expect(response).to be_not_found
+      end
     end
   end
 end
