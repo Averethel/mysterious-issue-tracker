@@ -265,7 +265,9 @@
              "id": "1",
              "type": "comments",
              "attributes": {
-               "body": "This is important"
+               "body": "This is important",
+               "created_at": "2015-09-08T09:04:51.520Z",
+               "updated_at": "2015-09-08T09:04:51.520Z"
              },
              "relationships": {
                "issue": {
@@ -280,7 +282,9 @@
              "id": "2",
              "type": "comments",
              "attributes": {
-               "body": "+1"
+               "body": "+1",
+               "created_at": "2015-09-08T09:36:51.520Z",
+               "updated_at": "2015-09-08T09:36:51.520Z"
              },
              "relationships": {
                "issue": {
@@ -324,7 +328,9 @@
           "id": "1",
           "type": "comments",
           "attributes": {
-            "body": "foo"
+            "body": "+1",
+            "created_at": "2015-09-08T09:36:51.520Z",
+            "updated_at": "2015-09-08T09:36:51.520Z"
           },
           "relationships": {
             "issue": {
@@ -358,7 +364,9 @@
           "id": "1",
           "type": "comments",
           "attributes": {
-            "body": "+1"
+            "body": "+1",
+            "created_at": "2015-09-08T09:36:51.520Z",
+            "updated_at": "2015-09-08T09:36:51.520Z"
           },
           "relationships": {
             "issue": {
@@ -411,7 +419,9 @@
           "id": "1",
           "type": "comments",
           "attributes": {
-            "body": "foo"
+            "body": "+1",
+            "created_at": "2015-09-08T09:36:51.520Z",
+            "updated_at": "2015-09-08T09:45:51.520Z"
           },
           "relationships": {
             "issue": {

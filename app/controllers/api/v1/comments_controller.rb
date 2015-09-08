@@ -5,7 +5,7 @@ class Api::V1::CommentsController < ApplicationController
   ## Returns a list of comments for given issue
   #
   # GET /api/v1/issues/:issue_id/comments
-  # 
+  #
   # parameters:
   #   page[size]: INTEGER
   #   page[number]: INTEGER
@@ -24,7 +24,9 @@ class Api::V1::CommentsController < ApplicationController
   #              "id": "1",
   #              "type": "comments",
   #              "attributes": {
-  #                "body": "This is important"
+  #                "body": "This is important",
+  #                "created_at": "2015-09-08T09:04:51.520Z",
+  #                "updated_at": "2015-09-08T09:04:51.520Z"
   #              },
   #              "relationships": {
   #                "issue": {
@@ -40,6 +42,8 @@ class Api::V1::CommentsController < ApplicationController
   #              "type": "comments",
   #              "attributes": {
   #                "body": "+1"
+  #                "created_at": "2015-09-08T09:36:51.520Z",
+  #                "updated_at": "2015-09-08T09:36:51.520Z"
   #              },
   #              "relationships": {
   #                "issue": {
@@ -91,7 +95,9 @@ class Api::V1::CommentsController < ApplicationController
   #           "id": "1",
   #           "type": "comments",
   #           "attributes": {
-  #             "body": "+1"
+  #             "body": "+1",
+  #             "created_at": "2015-09-08T09:36:51.520Z",
+  #             "updated_at": "2015-09-08T09:36:51.520Z"
   #           },
   #           "relationships": {
   #             "issue": {
@@ -127,7 +133,9 @@ class Api::V1::CommentsController < ApplicationController
   #           "id": "1",
   #           "type": "comments",
   #           "attributes": {
-  #             "body": "+1"
+  #             "body": "+1",
+  #             "created_at": "2015-09-08T09:36:51.520Z",
+  #             "updated_at": "2015-09-08T09:36:51.520Z"
   #           },
   #           "relationships": {
   #             "issue": {
@@ -185,7 +193,9 @@ class Api::V1::CommentsController < ApplicationController
   #           "id": "1",
   #           "type": "comments",
   #           "attributes": {
-  #             "body": "+1"
+  #             "body": "+1",
+  #             "created_at": "2015-09-08T09:36:51.520Z",
+  #             "updated_at": "2015-09-08T09:45:51.520Z"
   #           },
   #           "relationships": {
   #             "issue": {
