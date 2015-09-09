@@ -5,7 +5,7 @@ gem 'rails-api'
 gem 'pg'
 
 gem 'active_model_serializers', git: 'https://github.com/rails-api/active_model_serializers.git'
-gem 'unicorn'
+gem 'puma'
 
 gem 'kaminari'
 
