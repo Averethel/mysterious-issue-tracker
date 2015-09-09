@@ -1,5 +1,16 @@
 # Mysterious Issue Tracker API
 
+## Basic informations
+  * ruby-version: `2.2.3`
+  * database: `postgres`
+
+## Setup
+  * `git clone`
+  * `bundle install`
+  * `rake db:create:all`
+  * `rake db:migrate`
+  * `rake db:seed`
+
 ## Authentication method
 HTTP Basic Auth (ommited in examples)
 
