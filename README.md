@@ -11,6 +11,9 @@
   * `rake db:migrate`
   * `rake db:seed`
 
+## Test version
+Test version is deployed on [heroku](https://mysterious-issue-tracker-api.herokuapp.com/) and populated with [seed data](db/seeds.rb)
+
 ## Authentication method
 HTTP Basic Auth (ommited in examples)
 
